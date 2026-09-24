@@ -1,0 +1,10 @@
+# Переносы строк оставляем как в файлах (LF), чтобы Windows не переписывал их
+# и в истории не появлялись изменения, которых на самом деле не было.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.woff2 binary
+
+# public собирается из DearBoxV1 командой npm run build — руками не править.
+public/** linguist-generated=true

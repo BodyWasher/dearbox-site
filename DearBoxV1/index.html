@@ -1,0 +1,1644 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Dear Box — тайский чай и кофе, Уральск</title>
+<meta name="description" content="Меню кофейни Dear Box в Уральске: тайский молочный чай, жасминовый и лимонный чай, кофе, фруктовый американо, слаш и мороженое. Цены, часы работы, контакты.">
+<link rel="canonical" href="https://dearbox.kz/">
+
+<meta property="og:type" content="restaurant.restaurant">
+<meta property="og:site_name" content="Dear Box">
+<meta property="og:title" content="Dear Box — тайский чай и кофе, Уральск">
+<meta property="og:description" content="Тайский молочный чай, жасминовый и лимонный чай, кофе, фруктовый американо, слаш и мороженое. Смотрите меню и цены.">
+<!-- Превью для мессенджеров. Адрес обязан быть абсолютным — относительный
+     WhatsApp и Telegram не понимают, поэтому домен написан целиком.
+     Если домен сайта сменится — поправить его здесь, в twitter:image ниже
+     и в canonical выше. -->
+<meta property="og:image" content="https://dearbox.kz/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Dear Box — тайский чай и кофе, Уральск">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://dearbox.kz/og.png?v=2">
+
+<meta name="theme-color" content="#163C8C">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- Шрифты лежат в папке fonts и подключены в styles.css. preload запускает
+     их загрузку сразу, не дожидаясь, пока браузер дочитает таблицу стилей. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/manrope-cyr-lat.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/unbounded-cyr-lat.woff2" crossorigin>
+
+<link rel="stylesheet" href="styles.css">
+
+<script>
+/* Тема применяется до первой отрисовки, чтобы не было вспышки белого. */
+(function () {
+  try {
+    var t = localStorage.getItem('dearbox:theme');
+    if (t !== 'light' && t !== 'dark') {
+      t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+})();
+</script>
+
+<script defer src="app.js"></script>
+</head>
+
+<body id="top">
+
+<a class="skip" href="#menu" data-i18n="skip">К меню</a>
+
+<!-- Иконки, волна и заготовки для иллюстраций: один инлайновый спрайт,
+     ни одного лишнего запроса. -->
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <defs>
+    <!-- Блик на жидкости: общий для всех иллюстраций, поэтому
+         градиент описан один раз и накладывается поверх любого цвета. -->
+    <linearGradient id="g-shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity=".38"/>
+      <stop offset=".32" stop-color="#fff" stop-opacity=".06"/>
+      <stop offset=".72" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".10"/>
+    </linearGradient>
+
+    <!-- Внутренняя форма стакана: по ней обрезается жидкость. Три штуки на
+         все иллюстрации, а не своя копия в каждой. -->
+    <clipPath id="clip-cup"><path d="M16.5 27.5 L23.4 80.5 A4 4 0 0 0 27.4 84.5 H44.6 A4 4 0 0 0 48.6 80.5 L55.5 27.5 Z"/></clipPath>
+    <clipPath id="clip-slush"><path d="M20.4 37.5 L25.8 80.5 A4 4 0 0 0 29.8 84.5 H42.2 A4 4 0 0 0 46.2 80.5 L51.6 37.5 Z"/></clipPath>
+    <clipPath id="clip-sundae"><path d="M19 47.5 L24.3 65 A5 5 0 0 0 29.3 69.5 H42.7 A5 5 0 0 0 47.7 65 L53 47.5 Z"/></clipPath>
+
+    <!-- Неровная волна с их стаканов. Один путь, в футере переворачивается по вертикали. -->
+    <path id="wave-path" d="M 0 40 L 0 20 C 13.7 21 56.8 26.7 82 26.1 C 107.2 25.5 121.9 16.8 151.1 16.3 C 180.3 15.8 229 23.1 257.3 22.9 C 285.6 22.7 293.8 14.8 320.7 15.2 C 347.5 15.6 387.9 26.2 418.3 25.1 C 448.8 24 478.8 9.1 503.4 8.8 C 527.9 8.6 539.4 23.4 565.7 23.6 C 592 23.9 635.2 9.3 661.2 10.3 C 687.3 11.3 696.8 30 722 29.8 C 747.1 29.6 786.5 9.4 812.1 9.1 C 837.6 8.8 853.9 27 875.2 27.7 C 896.6 28.4 914.3 13.6 940 13.3 C 965.6 13 994.6 26 1029.4 25.9 C 1064.1 25.8 1117.5 12.9 1148.6 12.4 C 1179.6 11.9 1192.1 23.8 1215.7 23.1 C 1239.3 22.4 1260.4 7.8 1290.2 8 C 1320.1 8.2 1369.7 22.4 1394.7 24.4 C 1419.6 26.4 1432.4 20.7 1440 20 L 1440 40 Z"/>
+
+    <symbol id="logo-mark" viewBox="0 0 648 745">
+      <path fill="currentColor" fill-rule="evenodd" d="M 224.5 414.5 C 204.6 419.4 182.9 456.9 176.4 475.1 C 152.5 542.8 183.8 626.5 243.7 664.9 C 267.3 680 295.4 688.8 323.4 684.1 C 328.8 683.2 334.8 682.5 339 678.9 C 342 668.8 338.6 653.9 336.9 643.5 C 332.8 618.6 324.8 593.7 308.6 573.9 C 289.6 550.7 263.5 535.6 248.2 509.1 C 237.2 490.1 231 469.6 228 447.9 C 226.8 439.4 227.5 421.2 225.1 414.8 C 224.9 414.7 224.7 414.6 224.5 414.5 Z M 363 667.2 C 368.3 666.3 373.3 661.5 377.2 657.7 C 395.5 640.1 406.8 617.2 412.1 592.6 C 426.9 523.7 391.5 440.5 325.7 410.6 C 305.8 401.6 284.4 396.9 262.6 400.1 C 258.9 400.6 254.2 400.9 251 403 C 247 405.6 248.3 423.8 248.7 428.8 C 250.6 455.1 256.7 481.3 271.8 503.3 C 288 526.9 313.3 541.7 330.3 564.7 C 344.4 583.9 352.9 606.5 357.3 629.8 C 358.8 637.3 359.9 662.8 363 667.2 Z M 3 443.6 C 13 454.9 49.6 458 64.3 458 C 110.9 458 156.5 442.8 193.4 414.1 C 204.2 405.7 220.7 392.4 226.8 380 C 239.6 353.7 207.6 327.7 184.3 345.4 C 175.1 352.5 163.1 370.4 154.1 379.9 C 136.3 398.4 115 413.5 91.7 424.2 C 73.9 432.4 54.6 437.9 35.2 440.2 C 29.1 440.9 6.5 441.3 3 443.6 Z M 529.8 252.7 C 525.3 256.1 490.4 311.4 480.9 322.9 C 476.3 328.5 460.6 343.7 459.3 349.2 C 465.2 355.6 477.3 359 485.3 362.6 C 502.6 370.6 519.5 379.3 536.7 387.3 C 543.1 390.2 559.7 396 562.9 401.4 C 558.7 407.6 538.7 414.6 531.2 418.3 C 505.7 430.8 480.1 443 454.5 455 C 446 459 426.8 465.7 421.5 472.6 C 421.6 477.1 433.8 508.7 436 518.8 C 443.6 554.5 440.9 591.9 427 625.8 C 418.3 647 404.1 666.1 386.3 680.5 C 318.5 735.4 226.6 704.8 180.2 637.9 C 155.7 602.5 143.3 560.4 144 517.4 C 144.2 508.4 145.2 499.4 146.9 490.6 C 148.1 484.1 154 470 152.6 464.4 C 146.2 464.1 138.6 468.5 132.4 470.5 C 120.1 474.5 107.1 477.1 94.3 478.8 C 83.8 480.2 73 481.2 62.4 481 C 52.6 480.8 37.1 476.7 28.2 478.8 C 25.3 486.2 29.2 499 30.5 506.8 C 34.6 532 40.2 557.5 49.4 581.3 C 80.9 663 141.7 725.2 229.8 741.7 C 263.3 748 299 746.8 331.8 737.3 C 360.8 728.9 387.4 714.9 414.4 701.9 C 444.5 687.5 474.5 673 504.7 658.9 C 518.9 652.3 532.9 645.2 547.1 638.5 C 551.4 636.5 560 634.3 561.9 629.4 C 563.8 624.3 563.7 584.3 564.1 575.6 C 565.7 538.3 567.8 501 568.5 463.7 C 568.7 451.8 568.4 412 571 402.9 C 573.2 395.1 582 387.6 586.9 381.3 C 600.3 363.9 614.2 346.7 628.1 329.7 C 633 323.8 645.3 311.5 646.4 304.5 C 640.9 298.3 623.7 293.1 615.6 289.5 C 601.2 283.1 541.1 253.9 530.6 252.5 C 530.3 252.6 530.1 252.6 529.8 252.7 Z M 305.7 25.7 C 299.8 20.2 277 20.5 268.5 20.5 C 229.5 20.5 190.6 32.1 158.1 53.8 C 70 112.4 38.4 222.9 27.7 322.8 C 25.2 345.6 23.8 368.6 23.5 391.6 C 23.4 399.2 20.5 411 24.7 417.6 C 35.5 420.5 51 414.7 61.5 411.7 C 92.4 402.8 118.6 384.1 140.7 361.3 C 151.2 350.3 158.8 336.1 171 326.9 C 194.3 309.2 228.8 316.2 244.8 340.2 C 255.8 356.7 249.7 363.3 253.9 374.8 C 266.3 378.3 317 356.7 322.8 345.2 C 321.2 336.1 309.4 326.4 318.3 317.2 C 320.5 314.9 324 313.6 327.2 313.8 C 336.1 314.6 345 336 351.2 343 C 369.7 364 396.3 362.6 419.2 349.7 C 466.2 323.2 518 229.6 542.3 181.1 C 554.5 156.8 568.6 132.9 562.7 104.6 C 557.6 79.7 544.4 57 526.6 39.1 C 480.3 -7.3 418.4 -10 361.6 18.3 C 338.5 29.9 316.6 45.3 299.2 64.4 C 293.9 70.1 286.2 77.8 278.6 70.5 C 262.9 55.7 301.5 36.6 305.7 25.7 Z M 182 185.9 C 202.7 184.8 206.9 212.7 186.4 217.3 C 165.4 218 161.7 190.8 182 185.9 Z"/>
+    </symbol>
+
+    <!-- интерфейс -->
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </g>
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+            d="M12 3a6.5 6.5 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </symbol>
+    <symbol id="i-snow" viewBox="0 0 24 24">
+      <!-- Снежинка нарисована дважды: сначала тёмно-синим пошире, сверху
+           светло-голубым поуже. Тёмный подбой держит её читаемой и на белом,
+           и на тёмном, и на янтарной кнопке «Холодный», когда та выбрана —
+           ровно та же уловка, что у огня с его контуром.
+           Лучей три, веток четыре, больше не добавлять: в плашках карточек
+           значок рисуется 12 px, и лишние ветки там слипаются в кляксу. -->
+      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="#0B5C8C" stroke-width="3.5" stroke-opacity=".85"
+              d="M12 3v18M3.8 7.5l16.4 9M20.2 7.5 3.8 16.5M12 7l-2.6-2.2M12 7l2.6-2.2M12 17l-2.6 2.2M12 17l2.6 2.2"/>
+        <path stroke="#6BCDF3" stroke-width="1.8"
+              d="M12 3v18M3.8 7.5l16.4 9M20.2 7.5 3.8 16.5M12 7l-2.6-2.2M12 7l2.6-2.2M12 17l-2.6 2.2M12 17l2.6 2.2"/>
+      </g>
+    </symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24">
+      <!-- Тёмный контур нужен, чтобы огонь не сливался с фоном кнопки: у
+           выбранного «Горячего» она красная, и без контура оранжевое тело
+           легло бы на красное. Поэтому контур заметно темнее обоих. -->
+      <path fill="#E8491A" stroke="#5E1704" stroke-width="1.25" stroke-linejoin="round"
+            d="M12.7 1.8C13 5 11.3 6.3 9.7 8 8 9.8 6.1 11.7 6.1 14.7 6.1 18.8 9 22 12.5 22
+               16 22 18.9 19 18.9 14.8 18.9 11.7 16.8 9.8 15.1 8.1 13.7 6.6 12.9 4.3 12.7 1.8Z"/>
+      <path fill="#FFC24B"
+            d="M12.4 11.6C12.7 13.4 11.7 14.2 11 15.1 10.4 15.9 10 16.6 10 17.6
+               10 19.3 11.2 20.5 12.5 20.5 13.8 20.5 15 19.4 15 17.6 15 16.3 14.2 15.5 13.6 14.7
+               12.9 13.9 12.5 13 12.4 11.6Z"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2.2 14 9l6.8 2-6.8 2-2 6.8-2-6.8L3.2 11 10 9l2-6.8Z"/>
+    </symbol>
+    <symbol id="i-photo" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="16" rx="3"/>
+        <circle cx="8.7" cy="9.6" r="1.5"/>
+        <path d="m4 17.5 4.6-4.2a2 2 0 0 1 2.7 0l3 2.7m0 0 1.6-1.4a2 2 0 0 1 2.6 0L20 15.8"/>
+      </g>
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+            d="M21.5 16.9v2.6a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.5-3 19.3 19.3 0 0 1-6-6 19.6 19.6 0 0 1-3-8.6 2 2 0 0 1 2-2.2h2.6a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L7.5 9.5a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.9 2.3Z"/>
+    </symbol>
+    <symbol id="i-wa" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22c5.46 0 9.92-4.45 9.92-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.02c-1.5 0-2.98-.4-4.26-1.16l-.3-.18-3.16.83.84-3.08-.2-.32a8.2 8.2 0 0 1-1.26-4.2c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.28-8.15 8.28Z"/>
+      <path fill="currentColor" d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.6-.92-2.19-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1-1.04 2.47 0 1.46 1.06 2.86 1.21 3.06.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35Z"/>
+    </symbol>
+    <symbol id="i-ig" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="5.2"/>
+        <circle cx="12" cy="12" r="4"/>
+      </g>
+      <circle cx="17.3" cy="6.7" r="1.15" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 10.4c0 5.6-8 11.6-8 11.6s-8-6-8-11.6a8 8 0 0 1 16 0Z"/>
+        <circle cx="12" cy="10.2" r="3"/>
+      </g>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.4 2.1"/>
+      </g>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24">
+      <path fill="currentColor" d="m12 2.6 2.9 5.9 6.5.95-4.7 4.58 1.11 6.47L12 17.44 6.19 20.5l1.11-6.47L2.6 9.45l6.5-.95L12 2.6Z"/>
+    </symbol>
+    <symbol id="i-map" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 4.2 3.6 6.4v13.4L9 17.6l6 2.2 5.4-2.2V4.2L15 6.4 9 4.2Z"/><path d="M9 4.2v13.4M15 6.4v13.4"/>
+      </g>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M5 12h13m-5.5-5.5L18.5 12l-6 5.5"/>
+    </symbol>
+    <symbol id="i-list" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 6.5h11M9 12h11M9 17.5h11M4.2 6.5h.01M4.2 12h.01M4.2 17.5h.01"/>
+      </g>
+    </symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M6.05 8.05a7 7 0 0 0-.02 9.88c1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05Z"/>
+    </symbol>
+
+    <symbol id="i-close" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </g>
+    </symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3.2 4.2h2.3l2.2 10.6a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5l1.6-6.4H6.2"/>
+        <circle cx="10.2" cy="20" r="1.5"/>
+        <circle cx="17.4" cy="20" r="1.5"/>
+      </g>
+    </symbol>
+
+    <!-- значки разделов меню -->
+    <symbol id="i-cat-milk" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.6 8.4h10.8l-1.2 11.1a2 2 0 0 1-2 1.8h-4.4a2 2 0 0 1-2-1.8L6.6 8.4Z"/>
+        <path d="M5.2 8.4h13.6M13.9 8.2 16.4 2.9"/>
+      </g>
+      <g fill="currentColor">
+        <circle cx="10.2" cy="17.4" r="1.05"/><circle cx="13.4" cy="17.9" r="1.05"/><circle cx="11.9" cy="15.1" r="1.05"/>
+      </g>
+    </symbol>
+    <symbol id="i-cat-jasmine" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="12" cy="7.2" rx="2.5" ry="3.5"/>
+        <ellipse cx="12" cy="7.2" rx="2.5" ry="3.5" transform="rotate(72 12 12)"/>
+        <ellipse cx="12" cy="7.2" rx="2.5" ry="3.5" transform="rotate(144 12 12)"/>
+        <ellipse cx="12" cy="7.2" rx="2.5" ry="3.5" transform="rotate(216 12 12)"/>
+        <ellipse cx="12" cy="7.2" rx="2.5" ry="3.5" transform="rotate(288 12 12)"/>
+      </g>
+      <circle cx="12" cy="12" r="1.7" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-cat-lemon" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="8.4"/>
+        <path d="M12 3.6v16.8M3.6 12h16.8M6.1 6.1l11.8 11.8M17.9 6.1 6.1 17.9"/>
+      </g>
+    </symbol>
+    <symbol id="i-cat-coffee" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3.6 7.4h12.2v6.4a5 5 0 0 1-5 5H8.6a5 5 0 0 1-5-5V7.4Z"/>
+        <path d="M15.8 9h2a2.7 2.7 0 0 1 0 5.4h-2M3 21.4h14"/>
+        <path d="M7.4 2.6c-.7 1.1.7 1.7 0 2.8M11.4 2.6c-.7 1.1.7 1.7 0 2.8"/>
+      </g>
+    </symbol>
+    <!-- Фруктовый американо: стакан в два слоя (сок снизу, кофе сверху)
+         и фрукт с листиком на ободке. Раньше здесь висел незамкнутый завиток,
+         который ни на что не был похож. -->
+    <symbol id="i-cat-fruit" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.6 9.8h10.8l-1.2 9.7a2 2 0 0 1-2 1.8H9.8a2 2 0 0 1-2-1.8L6.6 9.8Z"/>
+        <path d="M5.2 9.8h13.6"/>
+        <path d="M7.9 14.4h8.2"/>
+        <circle cx="15.7" cy="6.8" r="2.4"/>
+        <path d="M15.7 4.4c.7-1.3 1.9-1.7 3-1.5-.1 1.2-.9 2.1-2 2.4"/>
+      </g>
+    </symbol>
+    <symbol id="i-cat-mix" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8.9" cy="14.4" r="6"/>
+        <circle cx="15.1" cy="14.4" r="6"/>
+        <path d="M12 8.7V5.2"/>
+        <path d="M12 6.2c1.4-2 3.5-2.3 4.9-1.9-.3 1.5-1.6 3-3.3 3.2"/>
+      </g>
+    </symbol>
+    <symbol id="i-cat-slush" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.6 10.4h10.8l-1.2 9.1a2 2 0 0 1-2 1.8h-4.4a2 2 0 0 1-2-1.8L6.6 10.4Z"/>
+        <path d="M6.2 10.4c0-3.2 2.6-5.8 5.8-5.8s5.8 2.6 5.8 5.8"/>
+        <path d="M12 4.6V2.4M9.4 14.2h5.2M10 17.4h4"/>
+      </g>
+    </symbol>
+    <!-- Мороженое подают в стаканчике, а не в рожке: три волны мягкого
+         мороженого над стаканом того же вида, что у остальных напитков. -->
+    <symbol id="i-cat-ice" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 12.6h10l-1.1 6.9a2 2 0 0 1-2 1.7h-3.8a2 2 0 0 1-2-1.7L7 12.6Z"/>
+        <path d="M5.8 12.6h12.4"/>
+        <path d="M6.9 12.6c0-2.7 2.3-4.1 5.1-4.1s5.1 1.4 5.1 4.1"/>
+        <path d="M8.6 9.2c0-2.1 1.5-3.3 3.4-3.3s3.4 1.2 3.4 3.3"/>
+        <path d="M10.2 6.4c0-1.6.8-2.9 1.8-3.6 1 .7 1.8 2 1.8 3.6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="hdr" id="hdr">
+  <div class="hdr-in">
+    <a class="brand" href="#top" id="brandLink">
+      <span class="brand-mark"><svg viewBox="0 0 648 745" aria-hidden="true"><use href="#logo-mark"/></svg></span>
+      <span class="brand-txt">
+        <h1 class="brand-name" id="brandName"></h1>
+        <span class="brand-tag" id="brandTag"></span>
+      </span>
+    </a>
+
+    <div class="hdr-act">
+      <!-- Переключатель языка. На кнопке написан язык, на котором сайт
+           сейчас: надпись всегда совпадает с тем, что гость видит на
+           странице. Нажатие переключает на следующий язык из LANGS.
+           Выбор помнит браузер. Подписи ставит app.js. -->
+      <button type="button" class="ibtn ibtn-lang" id="langBtn" aria-label="Сменить язык">
+        <span id="langTxt"></span>
+      </button>
+      <button type="button" class="ibtn" id="themeBtn" aria-label="Переключить тему">
+        <svg class="ico ico-light" aria-hidden="true"><use href="#i-moon"/></svg>
+        <svg class="ico ico-dark" aria-hidden="true"><use href="#i-sun"/></svg>
+      </button>
+      <!-- Корзина. Счётчик сидит НА значке, а не рядом с ним: рядом на
+           него нет места — на 430 px шапка заполнена ровно под ноль, и
+           слово «Корзина» пришлось бы убрать. Само слово прячется ниже
+           430 px по тому же правилу, что раньше работало для «Написать».
+           Число в счётчике — количество позиций, а не штук. -->
+      <button type="button" class="cart-btn" id="cartBtn">
+        <span class="cart-ic">
+          <svg class="ico" aria-hidden="true"><use href="#i-cart"/></svg>
+          <span class="cart-n" id="cartCount">0</span>
+        </span>
+        <span id="cartTxt"></span>
+      </button>
+    </div>
+  </div>
+
+  <p class="status" id="status" role="status">
+    <span class="dot" aria-hidden="true"></span><span id="statusTxt"></span>
+  </p>
+</header>
+
+<!-- Первый экран. Всё содержимое подставляет app.js из блока menu-data. -->
+<section class="hero" id="hero">
+  <span class="hero-leaf hero-leaf-1" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-leaf"/></svg></span>
+  <span class="hero-leaf hero-leaf-2" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-leaf"/></svg></span>
+
+  <!-- Композиция со стаканами: слаш, тайский чай с тапиокой, айс-латте. -->
+  <div class="hero-art" aria-hidden="true">
+    <svg viewBox="0 0 300 262" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="hc1"><path d="M27 112 L36 210 A9 9 0 0 0 45 219 H71 A9 9 0 0 0 80 210 L89 112 Z"/></clipPath>
+        <clipPath id="hc2"><path d="M110 98 L121 224 A11 11 0 0 0 132 235 H164 A11 11 0 0 0 175 224 L186 98 Z"/></clipPath>
+        <clipPath id="hc3"><path d="M211 136 L218 214 A9 9 0 0 0 227 223 H247 A9 9 0 0 0 256 214 L263 136 Z"/></clipPath>
+      </defs>
+
+      <!-- пузырьки-жемчужины в воздухе -->
+      <g fill="#FFFFFF" opacity=".2">
+        <circle cx="36" cy="40" r="7"/><circle cx="72" cy="20" r="4"/>
+        <circle cx="238" cy="52" r="5.5"/><circle cx="272" cy="88" r="3.5"/>
+        <circle cx="200" cy="26" r="3"/>
+      </g>
+
+      <!-- 1. Слаш -->
+      <g>
+        <path d="M22 106 L32 212 A13 13 0 0 0 45 224 H71 A13 13 0 0 0 84 212 L94 106 Z" fill="#FFFFFF" fill-opacity=".14"/>
+        <g clip-path="url(#hc1)">
+          <rect x="20" y="120" width="80" height="120" fill="#63C6E0"/>
+          <rect x="20" y="120" width="80" height="26" fill="#A9E4F2"/>
+          <g fill="#FFFFFF" opacity=".45">
+            <circle cx="44" cy="152" r="3"/><circle cx="62" cy="168" r="2.4"/><circle cx="52" cy="186" r="3.4"/>
+            <circle cx="70" cy="196" r="2.2"/><circle cx="40" cy="176" r="2"/>
+          </g>
+          <rect x="20" y="100" width="80" height="140" fill="url(#g-shine)"/>
+        </g>
+        <!-- шапка крема -->
+        <path d="M24 108 C24 78 38 58 58 58 C78 58 92 78 92 108 Z" fill="#FFF6E6" fill-opacity=".92"/>
+        <path d="M40 66 C46 52 70 54 72 68" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <ellipse cx="58" cy="106" rx="36" ry="7" fill="#FFFFFF" fill-opacity=".55"/>
+        <path d="M22 106 L32 212 A13 13 0 0 0 45 224 H71 A13 13 0 0 0 84 212 L94 106" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="3.4" stroke-linejoin="round"/>
+      </g>
+
+      <!-- 3. Айс-латте (справа, за главным стаканом) -->
+      <g>
+        <path d="M206 130 L215 216 A12 12 0 0 0 227 228 H247 A12 12 0 0 0 259 216 L268 130 Z" fill="#FFFFFF" fill-opacity=".14"/>
+        <g clip-path="url(#hc3)">
+          <rect x="204" y="140" width="72" height="110" fill="#4A2E1C"/>
+          <rect x="204" y="140" width="72" height="30" fill="#E9D2B4"/>
+          <g fill="#FFFFFF" opacity=".38">
+            <rect x="222" y="150" width="16" height="16" rx="4" transform="rotate(16 230 158)"/>
+            <rect x="240" y="176" width="14" height="14" rx="4" transform="rotate(-12 247 183)"/>
+            <rect x="214" y="188" width="15" height="15" rx="4" transform="rotate(24 221 195)"/>
+          </g>
+          <rect x="204" y="120" width="72" height="140" fill="url(#g-shine)"/>
+        </g>
+        <ellipse cx="237" cy="130" rx="31" ry="6.5" fill="#FFFFFF" fill-opacity=".55"/>
+        <path d="M206 130 L215 216 A12 12 0 0 0 227 228 H247 A12 12 0 0 0 259 216 L268 130" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="3.4" stroke-linejoin="round"/>
+        <rect x="243" y="76" width="10" height="62" rx="5" fill="#FFD27A" transform="rotate(13 248 107)"/>
+      </g>
+
+      <!-- 2. Тайский чай с тапиокой — главный -->
+      <g>
+        <path d="M104 92 L116 226 A15 15 0 0 0 131 241 H165 A15 15 0 0 0 180 226 L192 92 Z" fill="#FFFFFF" fill-opacity=".16"/>
+        <g clip-path="url(#hc2)">
+          <rect x="102" y="104" width="96" height="150" fill="#E08A2B"/>
+          <rect x="102" y="104" width="96" height="42" fill="#F7E3C4"/>
+          <path d="M102 146 q24 10 48 0 t48 0 v10 h-96 z" fill="#F1C48E"/>
+          <g fill="#31200F">
+            <circle cx="128" cy="216" r="7.5"/><circle cx="146" cy="222" r="7.5"/>
+            <circle cx="164" cy="215" r="7.5"/><circle cx="137" cy="203" r="7"/>
+            <circle cx="156" cy="202" r="7"/><circle cx="122" cy="200" r="6"/>
+          </g>
+          <rect x="102" y="90" width="96" height="160" fill="url(#g-shine)"/>
+        </g>
+        <ellipse cx="148" cy="92" rx="44" ry="9" fill="#FFFFFF" fill-opacity=".6"/>
+        <path d="M104 92 L116 226 A15 15 0 0 0 131 241 H165 A15 15 0 0 0 180 226 L192 92" fill="none" stroke="#FFFFFF" stroke-opacity=".65" stroke-width="4" stroke-linejoin="round"/>
+        <!-- широкая трубочка под тапиоку -->
+        <rect x="160" y="24" width="15" height="86" rx="7.5" fill="#FFD27A" transform="rotate(12 167 67)"/>
+        <rect x="163" y="26" width="4.5" height="80" rx="2.2" fill="#FFFFFF" fill-opacity=".5" transform="rotate(12 167 67)"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-in">
+    <p class="hero-kicker" id="heroKicker"></p>
+    <h2 class="hero-title" id="heroTitle"></h2>
+    <p class="hero-lead" id="heroLead"></p>
+    <div class="hero-stats" id="heroStats"></div>
+    <div class="hero-cta" id="heroCta"></div>
+  </div>
+
+  <div class="wave wave-hero" aria-hidden="true">
+    <svg viewBox="0 0 1440 40" preserveAspectRatio="none"><use href="#wave-path"/></svg>
+  </div>
+</section>
+
+<!-- О нас. Весь текст живёт в блоке menu-data, раздел "about" — в разметке
+     ни одного слова, которое пришлось бы править здесь. -->
+<section class="about" id="about" hidden>
+  <div class="about-in">
+    <div class="about-grid">
+
+      <div class="about-copy">
+        <h2 class="sec-title" id="aboutTitle"></h2>
+        <p class="about-lead" id="aboutLead"></p>
+        <p class="about-text" id="aboutText"></p>
+        <div class="about-sign" id="aboutSign"></div>
+      </div>
+
+      <!-- Стакан тайского чая и четыре «ингредиента» вокруг него. -->
+      <div class="about-art" aria-hidden="true">
+        <svg viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="ab-cup">
+              <path d="M116 98 L133 233 A11 11 0 0 0 144 243 H196 A11 11 0 0 0 207 233 L224 98 Z"/>
+            </clipPath>
+          </defs>
+
+          <circle class="ab-disc" cx="170" cy="168" r="130"/>
+          <circle class="ab-ring" cx="170" cy="168" r="145" fill="none"
+                  stroke-width="2.4" stroke-dasharray="2 13" stroke-linecap="round"/>
+
+          <ellipse class="shadow" cx="170" cy="257" rx="54" ry="8"/>
+          <path class="glass" d="M108 90 L126 236 A16 16 0 0 0 142 250 H198 A16 16 0 0 0 214 236 L232 90 Z"/>
+
+          <g clip-path="url(#ab-cup)">
+            <rect x="100" y="94" width="140" height="176" fill="#E08A2B"/>
+            <rect x="100" y="94" width="140" height="46" fill="#F7E3C4"/>
+            <path fill="#F1C48E" d="M100 140 q17 12 34 0 t34 0 t34 0 t34 0 v9 H100 Z"/>
+            <g fill="#35210F">
+              <circle cx="142" cy="228" r="9"/><circle cx="165" cy="235" r="9"/>
+              <circle cx="189" cy="227" r="9"/><circle cx="153" cy="212" r="8"/>
+              <circle cx="177" cy="211" r="8"/><circle cx="200" cy="213" r="7"/>
+            </g>
+            <rect x="100" y="80" width="140" height="196" fill="url(#g-shine)"/>
+          </g>
+
+          <g transform="rotate(12 212 120)">
+            <rect x="204" y="24" width="17" height="124" rx="8.5" fill="#E85D75"/>
+            <rect x="208" y="28" width="5" height="114" rx="2.5" fill="#FFFFFF" opacity=".45"/>
+          </g>
+
+          <ellipse class="rim" cx="170" cy="90" rx="62" ry="12"/>
+          <path class="line" fill="none" stroke-width="3.2" stroke-linejoin="round"
+                d="M108 90 L126 236 A16 16 0 0 0 142 250 H198 A16 16 0 0 0 214 236 L232 90 Z"/>
+
+          <g class="ab-bub ab-b1">
+            <circle class="bub" cx="40" cy="84" r="29"/>
+            <circle class="bub-ring" cx="40" cy="84" r="29" fill="none" stroke-width="1.6"/>
+            <use class="ic" href="#i-leaf" x="26" y="70" width="28" height="28"/>
+          </g>
+          <g class="ab-bub ab-b2">
+            <circle class="bub" cx="300" cy="70" r="27"/>
+            <circle class="bub-ring" cx="300" cy="70" r="27" fill="none" stroke-width="1.6"/>
+            <use class="ic" href="#i-cat-jasmine" x="287" y="57" width="26" height="26"/>
+          </g>
+          <g class="ab-bub ab-b3">
+            <circle class="bub" cx="306" cy="226" r="27"/>
+            <circle class="bub-ring" cx="306" cy="226" r="27" fill="none" stroke-width="1.6"/>
+            <use class="ic" href="#i-snow" x="293" y="213" width="26" height="26"/>
+          </g>
+          <g class="ab-bub ab-b4">
+            <circle class="bub" cx="38" cy="236" r="29"/>
+            <circle class="bub-ring" cx="38" cy="236" r="29" fill="none" stroke-width="1.6"/>
+            <g fill="#35210F">
+              <circle cx="30" cy="240" r="6"/><circle cx="45" cy="243" r="6"/><circle cx="39" cy="228" r="5.4"/>
+            </g>
+          </g>
+
+          <g class="ab-dots">
+            <circle cx="96" cy="34" r="4"/><circle cx="252" cy="292" r="5"/>
+            <circle cx="316" cy="150" r="3.4"/><circle cx="20" cy="160" r="3.4"/>
+          </g>
+        </svg>
+      </div>
+
+    </div>
+
+    <!-- «Таиланд в чашке». Синяя полоса в цветах вывески — единственное
+         тёмное пятно на кремовой странице, поэтому взгляд цепляется за неё
+         сам. Текст живёт в menu-data, раздел "about" → "journey"; если
+         убрать оттуда весь блок, полоса просто не нарисуется. -->
+    <div class="journey" id="aboutJourney" hidden></div>
+
+    <ul class="about-facts" id="aboutFacts"></ul>
+  </div>
+</section>
+
+<!-- .shell раскрывается только на компьютере: там лента категорий становится
+     боковой колонкой рядом с меню. На телефоне это display:contents. -->
+<div class="shell">
+
+  <nav class="cats" id="cats" aria-label="Категории меню">
+    <div class="cats-track" id="catsTrack">
+      <span class="cats-pill" id="catsPill" aria-hidden="true"></span>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Стоит до меню намеренно: в меню много незнакомых названий, и подсказка
+         нужна человеку до того, как он начнёт листать всё меню. -->
+    <section class="wrap first" id="first-time" aria-labelledby="firstTitle" hidden>
+      <h2 id="firstTitle" class="sec-title"></h2>
+    </section>
+
+    <div id="menu" class="wrap" tabindex="-1"></div>
+
+    <section class="wrap contacts" id="contacts" aria-labelledby="contactsTitle" hidden>
+      <h2 id="contactsTitle" class="sec-title"></h2>
+      <div class="card-c" id="contactsCard"></div>
+    </section>
+  </main>
+
+</div>
+
+<footer class="ftr" id="ftr" hidden>
+  <div class="wave wave-ftr" aria-hidden="true">
+    <svg viewBox="0 0 1440 40" preserveAspectRatio="none"><use href="#wave-path"/></svg>
+  </div>
+  <span class="ftr-leaf" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-leaf"/></svg></span>
+  <div class="ftr-in wrap" id="ftrIn"></div>
+</footer>
+
+<!-- Экран оформления заказа. Живёт внутри index.html, а не отдельным
+     файлом: иначе пришлось бы дублировать шапку, язык, тему и все стили.
+     Показывается по адресу «/#order», прячет меню и ведёт себя как
+     страница — у него свой адрес, и кнопка «назад» работает.
+
+     Кнопка «Оформить» зеленеет, когда телефон и адрес заполнены верно, и
+     открывает WhatsApp с готовым текстом заказа. Номер берётся из
+     "place.whatsapp" — того же, что в подвале и в контактах; второго
+     экземпляра номера в коде нет.
+
+     Счёт на оплату выставляет оператор в Kaspi — это уже вне сайта. Значит,
+     после нажатия заказ живёт в переписке, а не в какой-то системе: следить
+     за ним придётся руками.
+
+     Введённые телефон и адрес держатся в переменных app.js, а не в
+     localStorage: это личные данные, и складывать их в браузер без нужды
+     не стоит. Побочный плюс — перерисовка экрана (смена языка, например)
+     введённое не теряет, а перезагрузка страницы честно очищает. -->
+<section class="order" id="order" hidden aria-labelledby="orderTitle">
+  <div class="order-in">
+    <h2 class="sec-title" id="orderTitle"></h2>
+    <div id="orderBody"></div>
+  </div>
+</section>
+
+<!-- Общая оболочка всплывающих окон: выбор напитка и корзина рисуются
+     внутрь #modalBody, поэтому подложка, крестик, Esc, возврат по кнопке
+     «назад» и блокировка прокрутки написаны один раз на оба. -->
+<div class="mask" id="mask" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button type="button" class="modal-x" id="modalX" aria-label="Закрыть">
+      <svg class="ico" aria-hidden="true"><use href="#i-close"/></svg>
+    </button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     МЕНЮ, ЦЕНЫ И КОНТАКТЫ. Всё, что нужно менять в обычной жизни — здесь.
+     Как это править — написано в README.md.
+     Ничего, кроме текста и чисел между кавычками, трогать не нужно.
+
+     ДВА ЯЗЫКА. Русский — основной, казахский лежит рядом в полях с
+     суффиксом "_kk":
+
+         "name": "Жемчужный Тай",
+         "name_kk": "Інжу Тай",
+         "desc": "Молочный чай с тапиоковыми жемчужинами...",
+         "desc_kk": "Тапиока меруерттері қосылған сүтті шай..."
+
+     Правило одно: нет поля с "_kk" или оно пустое — показывается русское.
+     Поэтому переводить можно по одной позиции, сайт при этом не ломается.
+     Так же устроены названия разделов, блок "about", "first_time" и все
+     надписи интерфейса в разделе "texts".
+
+     ЧЕГО ПЕРЕВОДИТЬ НЕЛЬЗЯ — три поля работают как ключи, а не как текст:
+
+     1) "name" у позиции. По нему app.js подбирает цвет запасного рисунка
+        (регулярки в artSpec написаны по русским словам) и по нему же
+        ищутся позиции для блока "first_time".
+     2) "ref" в "first_time" — это ссылка на "name" позиции. Должна
+        совпадать с русским названием буква в букву, вместе с "ё".
+     3) "id" у раздела. К нему привязаны значок в app.js (CAT_ICON),
+        палитра рисунка (ART_PAL) и адрес вида "сайт/#fruit-mix".
+
+     Надписи "opens_at" и "closes_at" в "texts" содержат {time} — сюда
+     подставляется время. У языков разный порядок слов, поэтому время
+     стоит внутри строки, а не приклеивается к ней в коде.
+
+     ФОТОГРАФИИ. Поле "img" — файл из папки menu, один на позицию, общий
+     для обоих языков: на снимках нет подписей, только стакан. Убрали
+     "img" — на плитке рисуется запасная иллюстрация.
+
+     РАЗМЕРЫ. В ценах размеры записаны буквами "M" и "L" — это ключи, они
+     же лежат в корзине. Но гостю буквы ничего не говорят, поэтому на экран
+     уходит объём из таблицы "sizes" сразу под "place":
+
+         "sizes": { "M": "0,5 л", "L": "0,7 л" }
+
+     Поменялся стакан — правится одна строка здесь, а не сорок позиций.
+     Размера нет в таблице — покажется сам ключ, так что новый "XL" ничего
+     не сломает, просто будет написан буквами, пока его не опишут.
+
+     Объём у позиции можно переопределить полем "vols" — оно устроено как
+     "prices", по ключу на размер:
+
+         "prices": { "M": 330 },
+         "vols":   { "M": "" }        <- объём не показывать вообще
+         "vols":   { "M": "0,4 л" }   <- свой объём у этой позиции
+
+     Пустая строка стоит у всего мороженого: «0,5 л» на стакане софт-серва
+     была бы прямой неправдой. У таких позиций ряд «Размер» в окне выбора
+     не появляется совсем — ни выбора, ни объёма, говорить нечего.
+
+     Литры написаны с запятой и пробелом («0,5 л») — так правильно и
+     по-русски, и по-казахски, поэтому отдельной казахской таблицы нет.
+     Понадобится — добавьте "sizes_kk" и допишите её чтение в app.js.
+     ========================================================================== -->
+<script id="menu-data" type="application/json">
+{
+  "place": {
+    "name": "Dear Box",
+    "tagline": "Тайский чай и кофе",
+    "tagline_kk": "Тай шайы және кофе",
+    "address": "Проспект Нурсултана Назарбаева, 180, Уральск",
+    "address_kk": "Нұрсұлтан Назарбаев даңғылы, 180, Орал",
+    "phone": "+7 705 804 4443",
+    "instagram": "https://instagram.com/dear_box_uralsk",
+    "rating_2gis": 4.8,
+    "ratings_2gis": 98,
+    "currency": "₸",
+    "whatsapp": "77058044443",
+    "hours": {
+      "mon_sun": {
+        "open": "11:00",
+        "close": "23:00"
+      }
+    },
+    "timezone": "Asia/Almaty",
+    "link_2gis": "https://2gis.kz/uralsk/search/Dear%20Box"
+  },
+  "sizes": {
+    "M": "0,5 л",
+    "L": "0,7 л"
+  },
+  "about": {
+    "title": "О нас",
+    "title_kk": "Біз туралы",
+    "lead": "Dear Box — это не просто кофейня. Это место, где тайские традиции встречаются с современным вкусом, а каждый напиток готовится с любовью и вниманием к деталям.",
+    "lead_kk": "Dear Box — жай ғана кофехана емес. Бұл — тай дәстүрі заманауи дәммен тоғысатын орын, мұнда әр сусын сүйіспеншілікпен әрі ұсақ-түйегіне дейін мұқият дайындалады.",
+    "text": "Чайная на проспекте Назарбаева в Уральске. Всё меню держится на одном напитке — тайском чае: крепкий ассам, сгущённое молоко, лёд. Дальше начинается разное: тапиоковые жемчужины на дне стакана, солоноватая сырная пенка сверху, жасминовый чай с фруктами, фруктовый американо, слаш и мороженое. Сорок четыре позиции в восьми разделах; часть чаёв и латте можно взять горячими — это отмечено в меню.",
+    "text_kk": "Оралдағы Назарбаев даңғылындағы шайхана. Бүкіл мәзір бір сусынға құрылған — тай шайына: қою ассам, қоюландырылған сүт, мұз. Әрі қарай әртүрлілік басталады: стақанның түбіндегі тапиока меруерттері, үстіндегі тұздауыш сыр көбігі, жемісі бар жасмин шайы, жемісті американо, слаш және балмұздақ. Сегіз бөлімде қырық төрт позиция; кейбір шай мен латтені ыстық алуға болады — ол мәзірде белгіленген.",
+    "journey": {
+      "title": "Таиланд в чашке",
+      "title_kk": "Стақандағы Тайланд",
+      "items": [
+        {
+          "label": "Вкус",
+          "label_kk": "Дәм",
+          "text": "Тайский чай, специи и фрукты — те же, что в чайных Таиланда.",
+          "text_kk": "Тай шайы, дәмдеуіштер мен жемістер — Тайланд шайханаларындағыдай."
+        },
+        {
+          "label": "Вид",
+          "label_kk": "Көрініс",
+          "text": "Белое и синее, как тайское побережье. В стакане видно каждый слой.",
+          "text_kk": "Ақ пен көк — тай жағалауының түстері. Стақанда әр қабат көрініп тұрады."
+        },
+        {
+          "label": "Всё вокруг",
+          "label_kk": "Айнала",
+          "text": "Слоник на коробке и тайские названия — Таиланд начинается ещё до первого глотка.",
+          "text_kk": "Қораптағы піл мен тай атаулары — Тайланд алғашқы жұтымнан бұрын басталады."
+        }
+      ]
+    },
+    "facts": [
+      {
+        "icon": "ice",
+        "title": "Тайское мороженое",
+        "title_kk": "Тай балмұздағы",
+        "text": "Фирменный тайский вкус, но мороженым: плотная текстура и густой чайный аромат.",
+        "text_kk": "Фирмалық тай дәмі, бірақ балмұздақ күйінде: тығыз құрылымы және қою шай хош иісі."
+      },
+      {
+        "icon": "fruit",
+        "title": "Фруктовый американо",
+        "title_kk": "Жемісті американо",
+        "text": "Холодный кофе поверх фруктового сока — два слоя в одном стакане. Легче обычного американо.",
+        "text_kk": "Жеміс шырынының үстіне құйылған суық кофе — бір стақанда екі қабат. Кәдімгі американодан жеңіл."
+      },
+      {
+        "icon": "lemon",
+        "title": "Тайский лимонный чай",
+        "title_kk": "Тай лимон шайы",
+        "text": "Тайские цитрусы: насыщенный аромат и освежающая кислинка. Лёд, лайм, ничего лишнего.",
+        "text_kk": "Тай цитрустары: қанық хош иіс пен сергітетін қышқылдық. Мұз, лайм, артық ештеңе жоқ."
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "thai-milk-tea",
+      "name": "Тайский молочный чай",
+      "name_kk": "Тай сүтті шайы",
+      "items": [
+        {
+          "name": "Тайский Попкорн",
+          "name_kk": "Попкорн Тай",
+          "img": "menu/01_tayskiy-popkorn.webp",
+          "prices": {
+            "M": 880,
+            "L": 1050
+          },
+          "temp": [
+            "cold"
+          ],
+          "featured": true,
+          "desc": "Тайский молочный чай с шапкой карамельного попкорна. Сладко, десертно, есть ложкой и пить одновременно.",
+          "desc_kk": "Карамельді попкорн бүркенген тай сүтті шайы. Тәтті әрі десертті: бір мезгілде қасықпен жеп, ішіп отырасыз.",
+          "verified": false
+        },
+        {
+          "name": "Сырный Тай",
+          "name_kk": "Сырлы Тай",
+          "img": "menu/02_syrnyy-tay.webp",
+          "prices": {
+            "M": 1260,
+            "L": 1320
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Чай под густой солоноватой сырной пенкой. Пить нужно через край, а не через трубочку — иначе весь смысл теряется.",
+          "desc_kk": "Қалың әрі тұздауыш сыр көбігінің астындағы шай. Түтікшемен емес, стақанның шетінен ішу керек — әйтпесе бар мәні жоғалады.",
+          "verified": false
+        },
+        {
+          "name": "Сырный Тай (лёгкий вкус)",
+          "name_kk": "Сырлы Тай (жеңіл дәмі)",
+          "img": "menu/03_syrnyy-tay-legkiy.webp",
+          "prices": {
+            "M": 990,
+            "L": 1260
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "То же сочетание, но пенка тоньше и мягче. Хороший вариант, если пробуете сырный чай впервые.",
+          "desc_kk": "Дәл сол үйлесім, бірақ көбігі жұқалау әрі жұмсақ. Сырлы шайды алғаш рет көріп тұрсаңыз — осыдан бастаңыз.",
+          "verified": false
+        },
+        {
+          "name": "Жемчужный Тай",
+          "name_kk": "Інжу Тай",
+          "img": "menu/04_zhemchuzhnyy-tay.webp",
+          "prices": {
+            "M": 930,
+            "L": 990
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Молочный чай с тапиоковыми жемчужинами. Те самые упругие шарики на дне, которые тянут через широкую трубочку.",
+          "desc_kk": "Тапиока меруерттері қосылған сүтті шай. Түбінде жататын серпімді шариктерді жалпақ түтікшемен тартып ішесіз.",
+          "verified": false
+        },
+        {
+          "name": "Чай Карамельное Брюле",
+          "name_kk": "Карамелді Брюле Шай",
+          "img": "menu/05_chay-karamelnoe-bryule.webp",
+          "prices": {
+            "M": 1370
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Молочный чай с карамельной ноткой и жжёным сахаром сверху, как у десерта крем-брюле.",
+          "desc_kk": "Карамель нотасы бар сүтті шай, үстінде күйдірілген қант — крем-брюле десертіндегідей.",
+          "verified": false
+        },
+        {
+          "name": "Ассам с тапиокой",
+          "name_kk": "Ассам Інжулі Шай",
+          "img": "menu/06_assam-s-tapiokoy.webp",
+          "prices": {
+            "M": 990,
+            "L": 1150
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Крепкий чай ассам с молоком и тапиокой. Насыщеннее и менее сладкий, чем жемчужный.",
+          "desc_kk": "Сүт пен тапиока қосылған қою ассам шайы. Інжу Тайға қарағанда қанық әрі тәттілігі азырақ.",
+          "verified": false
+        },
+        {
+          "name": "Молочный Чай Ассам",
+          "name_kk": "Ассам Сүтті Шай",
+          "img": "menu/07_molochnyy-chay-assam.webp",
+          "prices": {
+            "M": 990,
+            "L": 1150
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Классика тайских чайных: крепкий ассам с молоком. База, с которой стоит начать знакомство.",
+          "desc_kk": "Тай шайханаларының классикасы: сүті бар қою ассам. Танысуды осыдан бастаған жөн.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "jasmine-milk-tea",
+      "name": "Жасминовый чай с молоком",
+      "name_kk": "Жасмин сүтті шай",
+      "items": [
+        {
+          "name": "Манго Жасмин",
+          "name_kk": "Манго Жасмин",
+          "img": "menu/26_mango-zhasmin.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Жасминовый чай с молоком и манго. Цветочный аромат и тропическая сладость.",
+          "desc_kk": "Сүт пен манго қосылған жасмин шайы. Гүл хош иісі және тропикалық тәттілік.",
+          "verified": false
+        },
+        {
+          "name": "Ананас Жасмин",
+          "name_kk": "Ананас Жасмин",
+          "img": "menu/27_ananas-zhasmin.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Жасминовый чай с молоком и ананасом — кисло-сладко и освежающе.",
+          "desc_kk": "Сүт пен ананас қосылған жасмин шайы — қышқылтым-тәтті әрі сергітеді.",
+          "verified": false
+        },
+        {
+          "name": "Маракуйя Жасмин",
+          "name_kk": "Маракуйя Жасмин",
+          "img": "menu/28_marakuyya-zhasmin.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Жасминовый чай с молоком и маракуйей. Самый яркий и кисловатый в линейке.",
+          "desc_kk": "Сүт пен маракуйя қосылған жасмин шайы. Бөлімдегі ең ашық әрі қышқылтым дәм.",
+          "verified": false
+        },
+        {
+          "name": "Персик Жасмин",
+          "name_kk": "Шабдалы Жасмин",
+          "img": "menu/29_persik-zhasmin.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Жасминовый чай с молоком и персиком. Мягкий, некислый, для тех, кто не любит резкие вкусы.",
+          "desc_kk": "Сүт пен шабдалы қосылған жасмин шайы. Жұмсақ, қышқылы жоқ — өткір дәмді ұнатпайтындарға.",
+          "verified": false
+        },
+        {
+          "name": "Виноград Жасмин",
+          "name_kk": "Жүзім Жасмин",
+          "img": "menu/30_vinograd-zhasmin.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Жасминовый чай с молоком и виноградом. Сладкий, с узнаваемым виноградным ароматом.",
+          "desc_kk": "Сүт пен жүзім қосылған жасмин шайы. Тәтті, жүзімнің таныс хош иісімен.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "thai-lemon-tea",
+      "name": "Тайский лимонный чай",
+      "name_kk": "Тай лимон шайы",
+      "items": [
+        {
+          "name": "Тайский Красный Чай",
+          "name_kk": "Тай Қызыл Шайы",
+          "img": "menu/39_tayskiy-krasnyy-chay.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Классический тайский чай со льдом и лаймом. Освежает лучше всего в жару.",
+          "desc_kk": "Мұз бен лайм қосылған классикалық тай шайы. Ыстықта бәрінен жақсы сергітеді.",
+          "verified": false
+        },
+        {
+          "name": "Освежающий Лимон",
+          "name_kk": "Самалды Лимон",
+          "img": "menu/40_osvezhayushchiy-limon.webp",
+          "prices": {
+            "M": 450,
+            "L": 600
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Самый простой и лёгкий напиток в меню. Лимон, лёд, ничего лишнего.",
+          "desc_kk": "Мәзірдегі ең қарапайым әрі жеңіл сусын. Лимон, мұз — артық ештеңе жоқ.",
+          "verified": false
+        },
+        {
+          "name": "Тайский Розовый Чай",
+          "name_kk": "Тай Раушан Шайы",
+          "img": "menu/41_tayskiy-rozovyy-chay.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Тот же тайский чай, но с ягодным оттенком. Мягче красного.",
+          "desc_kk": "Дәл сол тай шайы, бірақ жидек реңкімен. Қызылға қарағанда жұмсақтау.",
+          "verified": false
+        },
+        {
+          "name": "Тайский Зелёный Чай",
+          "name_kk": "Тай Жасыл Шайы",
+          "img": "menu/42_tayskiy-zelenyy-chay.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Зелёный чай со льдом и лаймом. Травянистый, менее сладкий.",
+          "desc_kk": "Мұз бен лайм қосылған жасыл шай. Шөптесін дәмді, тәттілігі азырақ.",
+          "verified": false
+        },
+        {
+          "name": "Ананас Маракуйя",
+          "name_kk": "Ананас Маракуйя",
+          "img": "menu/43_ananas-marakuyya.webp",
+          "prices": {
+            "M": 1260
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Фруктовый чай на двух тропических вкусах сразу. Кисло-сладкий, с кусочками фруктов.",
+          "desc_kk": "Бірден екі тропикалық дәмге құрылған жеміс шайы. Қышқылтым-тәтті, жеміс тілімдерімен.",
+          "verified": false
+        },
+        {
+          "name": "Супер Фруктовый Чай",
+          "name_kk": "Супер Жемісті Шай",
+          "img": "menu/44_super-fruktovyy-chay.webp",
+          "prices": {
+            "M": 1380
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Самый насыщенный фруктовый чай в меню, с миксом фруктов. Порция большая.",
+          "desc_kk": "Мәзірдегі ең қанық жеміс шайы, жеміс миксімен. Порциясы үлкен.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "fruit-mix",
+      "name": "Фруктовый микс",
+      "name_kk": "Жеміс миксі",
+      "items": [
+        {
+          "name": "Грейпфрут Персик",
+          "name_kk": "Грейпфрут Персик",
+          "img": "menu/31_greypfrut-persik.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Фруктовый чай на двух вкусах сразу: горчинка грейпфрута и сладость персика. Дольки грейпфрута плавают прямо в стакане.",
+          "desc_kk": "Бірден екі дәмге құрылған жеміс шайы: грейпфруттың ащылауы мен шабдалының тәттілігі. Грейпфрут тілімдері стақанның ішінде жүзіп жүреді.",
+          "verified": false
+        },
+        {
+          "name": "Жасмин Виноград",
+          "name_kk": "Жасмин Жүзім",
+          "img": "menu/32_zhasmin-vinograd.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Жасминовый чай с виноградом, но без молока. Тёмный и ягодный, цветочная нота остаётся в послевкусии.",
+          "desc_kk": "Жүзім қосылған жасмин шайы, бірақ сүтсіз. Қою әрі жидек дәмді, гүл нотасы соңында қалады.",
+          "verified": false
+        },
+        {
+          "name": "Манго Ананас",
+          "name_kk": "Манго Ананас",
+          "img": "menu/33_mango-ananas.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Манго и ананас в одном стакане, сверху — кусочки манго. Самый тропический вкус в разделе.",
+          "desc_kk": "Бір стақандағы манго мен ананас, үстінде манго тілімдері. Бөлімдегі ең тропикалық дәм.",
+          "verified": false
+        },
+        {
+          "name": "Ананасовый Бриз",
+          "name_kk": "Ананас Самалы",
+          "img": "menu/34_ananasovyy-briz.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Ананас с лимоном и льдом. Кислее соседей по разделу и лучше всех освежает в жару.",
+          "desc_kk": "Мұз бен лимон қосылған ананас. Бөлімдегі көршілерінен қышқылдау әрі ыстықта бәрінен жақсы сергітеді.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "italian-coffee",
+      "name": "Итальянский кофе",
+      "name_kk": "Итальян стиліндегі кофе",
+      "items": [
+        {
+          "name": "Американо",
+          "name_kk": "Американо",
+          "img": "menu/08_amerikano.webp",
+          "prices": {
+            "M": 660,
+            "L": 820
+          },
+          "temp": [
+            "cold"
+          ],
+          "featured": true,
+          "desc": "Обычный американо, холодный. Самый доступный напиток, если не хочется экспериментов.",
+          "desc_kk": "Кәдімгі американо, суық күйінде. Тәжірибе жасағыңыз келмесе — мәзірдегі ең қолжетімді сусын.",
+          "verified": false
+        },
+        {
+          "name": "Классический Латте",
+          "name_kk": "Классикалық Латте",
+          "img": "menu/11_klassicheskiy-latte.webp",
+          "prices": {
+            "M": 1320
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Эспрессо с молоком без добавок. Можно холодным или горячим.",
+          "desc_kk": "Қоспасыз эспрессо мен сүт. Суық та, ыстық та болады.",
+          "verified": false
+        },
+        {
+          "name": "Сливочный Латте",
+          "name_kk": "Сары майлы латте",
+          "img": "menu/09_slivochnyy-latte.webp",
+          "prices": {
+            "M": 1320
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Латте с более плотной молочной текстурой. Мягкий и не сладкий.",
+          "desc_kk": "Сүт құрылымы қоюлау латте. Жұмсақ әрі тәтті емес.",
+          "verified": false
+        },
+        {
+          "name": "Карамельный Латте",
+          "name_kk": "Карамель Латте",
+          "img": "menu/10_karamelnyy-latte.webp",
+          "prices": {
+            "M": 1320
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Латте с карамелью. Самый привычный вариант для тех, кто любит послаще.",
+          "desc_kk": "Карамелі бар латте. Тәттірек ұнататындарға ең таныс нұсқа.",
+          "verified": false
+        },
+        {
+          "name": "Кокосовый Латте",
+          "name_kk": "Кокос Латте",
+          "img": "menu/12_kokosovyy-latte.webp",
+          "prices": {
+            "M": 1320
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Латте с кокосовым вкусом. Хорошо идёт холодным.",
+          "desc_kk": "Кокос дәмі бар латте. Суық күйінде жақсы кетеді.",
+          "verified": false
+        },
+        {
+          "name": "Ванильный Латте",
+          "name_kk": "Ваниль Латте",
+          "img": "menu/13_vanilnyy-latte.webp",
+          "prices": {
+            "M": 1320
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Латте с ванилью — мягкая классика без сюрпризов.",
+          "desc_kk": "Ванилі бар латте — тосынсыйсыз жұмсақ классика.",
+          "verified": false
+        },
+        {
+          "name": "Османтус Латте",
+          "name_kk": "Османтус Латте",
+          "img": "menu/14_osmantus-latte.webp",
+          "prices": {
+            "M": 1320
+          },
+          "temp": [
+            "cold",
+            "hot"
+          ],
+          "desc": "Латте с цветочным ароматом османтуса — это китайский цветок с нотой абрикоса и мёда. Самый необычный кофе в меню.",
+          "desc_kk": "Османтустың гүл хош иісі бар латте — бұл өрік пен бал нотасы бар қытай гүлі. Мәзірдегі ең ерекше кофе.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "fruit-americano",
+      "name": "Фруктовый американо",
+      "name_kk": "Жемісті американо",
+      "items": [
+        {
+          "name": "Грейпфрут Американо",
+          "name_kk": "Грейпфрут Американо",
+          "img": "menu/15_greypfrut-amerikano.webp",
+          "prices": {
+            "M": 880,
+            "L": 1050
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Кофе и грейпфрутовый сок слоями. Горько-кислое сочетание, звучит странно, работает отлично.",
+          "desc_kk": "Кофе мен грейпфрут шырыны қабаттасып тұр. Ащы-қышқыл үйлесім: оғаш естіледі, тамаша жұмыс істейді.",
+          "verified": false
+        },
+        {
+          "name": "Ананас Американо",
+          "name_kk": "Ананас Американо",
+          "img": "menu/16_ananas-amerikano.webp",
+          "prices": {
+            "M": 880,
+            "L": 1050
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Американо с ананасом. Кисло-сладко, освежает сильнее обычного кофе.",
+          "desc_kk": "Ананас қосылған американо. Қышқылтым-тәтті, кәдімгі кофеден күштірек сергітеді.",
+          "verified": false
+        },
+        {
+          "name": "Персик Американо",
+          "name_kk": "Шабдалы Американо",
+          "img": "menu/17_persik-amerikano.webp",
+          "prices": {
+            "M": 880,
+            "L": 1050
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Американо с персиком. Самый мягкий из фруктовых — хорош для первого раза.",
+          "desc_kk": "Шабдалы қосылған американо. Жеміс американоларының ішіндегі ең жұмсағы — алғаш танысуға қолайлы.",
+          "verified": false
+        },
+        {
+          "name": "Виноград Американо",
+          "name_kk": "Жүзім Американо",
+          "img": "menu/18_vinograd-amerikano.webp",
+          "prices": {
+            "M": 880,
+            "L": 1050
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Американо с виноградом. Сладкий фрукт против горького кофе.",
+          "desc_kk": "Жүзім қосылған американо. Тәтті жеміс пен ащы кофенің тартысы.",
+          "verified": false
+        },
+        {
+          "name": "Манго Американо",
+          "name_kk": "Манго Американо",
+          "img": "menu/19_mango-amerikano.webp",
+          "prices": {
+            "M": 880,
+            "L": 1050
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Американо с манго. Тропическая сладость поверх кофейной горчинки.",
+          "desc_kk": "Манго қосылған американо. Кофе ащылығының үстіндегі тропикалық тәттілік.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "slush",
+      "name": "Слаш с кремом",
+      "name_kk": "Кремді слаш",
+      "items": [
+        {
+          "name": "Манго Слаш",
+          "name_kk": "Манго Слаш",
+          "img": "menu/35_mango-slash.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Ледяной манговый напиток со взбитым кремом сверху. Гуще чая, ближе к десерту.",
+          "desc_kk": "Үстінде көпіршітілген кремі бар мұзды манго сусыны. Шайдан қоюлау, десертке жақын.",
+          "verified": false
+        },
+        {
+          "name": "Персик Слаш",
+          "name_kk": "Персик Слаш",
+          "img": "menu/36_persik-slash.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Ледяной персиковый слаш с кремовой шапкой. Мягкий и нежный.",
+          "desc_kk": "Крем бүркенген мұзды шабдалы слашы. Жұмсақ әрі нәзік.",
+          "verified": false
+        },
+        {
+          "name": "Ананас Слаш",
+          "name_kk": "Ананас Слаш",
+          "img": "menu/37_ananas-slash.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Ледяной ананасовый слаш с кремом. Самый освежающий из четырёх.",
+          "desc_kk": "Кремі бар мұзды ананас слашы. Төртеуінің ішіндегі ең сергітетіні.",
+          "verified": false
+        },
+        {
+          "name": "Виноград Слаш",
+          "name_kk": "Жүзім Слаш",
+          "img": "menu/38_vinograd-slash.webp",
+          "prices": {
+            "M": 1080
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Ледяной виноградный слаш с кремом. Сладкий и яркий на цвет.",
+          "desc_kk": "Кремі бар мұзды жүзім слашы. Тәтті әрі түсі ашық.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "ice-cream",
+      "name": "Тайское молочное мороженое",
+      "name_kk": "Тай сүтті балмұздағы",
+      "items": [
+        {
+          "name": "Классическое Мороженое",
+          "name_kk": "Классикалық Балмұздақ",
+          "img": "menu/22_klassicheskoe-morozhenoe.webp",
+          "prices": {
+            "M": 330
+          },
+          "vols": {
+            "M": ""
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Мягкое молочное мороженое без добавок. Самая доступная позиция в меню.",
+          "desc_kk": "Қоспасыз жұмсақ сүт балмұздағы. Мәзірдегі ең қолжетімді позиция.",
+          "verified": false
+        },
+        {
+          "name": "Тайское Красное Мороженое",
+          "name_kk": "Тай Қызыл Балмұздақ",
+          "img": "menu/23_tayskoe-krasnoe-morozhenoe.webp",
+          "prices": {
+            "M": 330
+          },
+          "vols": {
+            "M": ""
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Мороженое со вкусом тайского чая. Тот же вкус, что в напитке, только холоднее.",
+          "desc_kk": "Тай шайының дәмі бар балмұздақ. Сусындағы дәмнің дәл өзі, тек салқынырақ.",
+          "verified": false
+        },
+        {
+          "name": "Клубника Сандей",
+          "name_kk": "Құлпынай Сандей",
+          "img": "menu/20_klubnika-sandey.webp",
+          "prices": {
+            "M": 490
+          },
+          "vols": {
+            "M": ""
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Молочное мороженое с клубничным топпингом.",
+          "desc_kk": "Құлпынай топпингі бар сүт балмұздағы.",
+          "verified": false
+        },
+        {
+          "name": "Манго Сандей",
+          "name_kk": "Манго Сандей",
+          "img": "menu/21_mango-sandey.webp",
+          "prices": {
+            "M": 490
+          },
+          "vols": {
+            "M": ""
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Молочное мороженое с манговым топпингом.",
+          "desc_kk": "Манго топпингі бар сүт балмұздағы.",
+          "verified": false
+        },
+        {
+          "name": "Шоколадное Мороженое",
+          "name_kk": "Шоколад Балмұздақ",
+          "img": "menu/24_shokoladnoe-morozhenoe.webp",
+          "prices": {
+            "M": 490
+          },
+          "vols": {
+            "M": ""
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Мягкое шоколадное мороженое.",
+          "desc_kk": "Жұмсақ шоколад балмұздағы.",
+          "verified": false
+        },
+        {
+          "name": "Двойной Микс Мороженое",
+          "name_kk": "Қос Дәмді Балмұздақ",
+          "img": "menu/25_dvoynoy-miks-morozhenoe.webp",
+          "prices": {
+            "M": 490
+          },
+          "vols": {
+            "M": ""
+          },
+          "temp": [
+            "cold"
+          ],
+          "desc": "Два вкуса в одном стакане — молочный и шоколадный.",
+          "desc_kk": "Бір стақандағы екі дәм — сүтті және шоколадты.",
+          "verified": false
+        }
+      ]
+    }
+  ],
+  "first_time": [
+    {
+      "ref": "Молочный Чай Ассам",
+      "why": "Начните отсюда: это база тайской чайной — крепкий чай ассам с молоком, без добавок и сюрпризов.",
+      "why_kk": "Осыдан бастаңыз: бұл тай шайханасының негізі — сүті бар қою ассам шайы, қоспасыз және тосынсыйсыз."
+    },
+    {
+      "ref": "Жемчужный Тай",
+      "why": "Если хочется тех самых упругих шариков на дне стакана — берите этот: молочный чай с тапиокой.",
+      "why_kk": "Стақанның түбіндегі сол серпімді шариктерді қаласаңыз — осыны алыңыз: тапиокасы бар сүтті шай."
+    },
+    {
+      "ref": "Сырный Тай (лёгкий вкус)",
+      "why": "Самое непривычное в меню — солоноватая сырная пенка поверх чая. В лёгкой версии пенка тоньше и мягче, с неё и стоит начинать.",
+      "why_kk": "Мәзірдегі ең бейтаныс нәрсе — шайдың үстіндегі тұздауыш сыр көбігі. Жеңіл нұсқасында көбік жұқалау әрі жұмсақ, содан бастаған жөн."
+    }
+  ],
+  "texts": {
+    "contacts": "Контакты",
+    "contacts_kk": "Байланыс",
+    "open": "Открыто",
+    "open_kk": "Ашық",
+    "closed": "Закрыто",
+    "closed_kk": "Жабық",
+    "opens_at": "откроем в {time}",
+    "opens_at_kk": "{time}-де ашыламыз",
+    "closes_at": "закроем в {time}",
+    "closes_at_kk": "{time}-де жабамыз",
+    "first_time": "Первый раз у нас?",
+    "first_time_kk": "Бізде алғаш рет пе?",
+    "address": "Адрес",
+    "address_kk": "Мекенжай",
+    "hours": "Часы работы",
+    "hours_kk": "Жұмыс уақыты",
+    "size_m": "средний",
+    "size_m_kk": "орташа",
+    "size_l": "большой",
+    "size_l_kk": "үлкен",
+    "cold": "холодный",
+    "cold_kk": "суық",
+    "hot": "можно горячим",
+    "hot_kk": "ыстық болады",
+    "skip": "К меню",
+    "skip_kk": "Мәзірге",
+    "categories": "Категории",
+    "categories_kk": "Бөлімдер",
+    "theme_toggle": "Переключить тему",
+    "theme_toggle_kk": "Тақырыпты ауыстыру",
+    "error": "Не удалось загрузить меню. Обновите страницу.",
+    "error_kk": "Мәзір жүктелмеді. Бетті жаңартыңыз.",
+    "first_lead": "Три напитка, с которых стоит начать, если названия в меню ничего вам не говорят.",
+    "first_lead_kk": "Мәзірдегі атаулар сізге ештеңе айтпаса — осы үш сусыннан бастаңыз.",
+    "rating_label": "Рейтинг в 2ГИС",
+    "rating_label_kk": "2ГИС рейтингі",
+    "ratings_one": "оценка",
+    "ratings_one_kk": "баға",
+    "ratings_few": "оценки",
+    "ratings_few_kk": "баға",
+    "ratings_many": "оценок",
+    "ratings_many_kk": "баға",
+    "open_2gis": "Открыть в 2ГИС",
+    "open_2gis_kk": "2ГИС-те ашу",
+    "call": "Позвонить",
+    "call_kk": "Қоңырау шалу",
+    "whatsapp_write": "Написать в WhatsApp",
+    "whatsapp_write_kk": "WhatsApp-қа жазу",
+    "instagram": "Instagram",
+    "instagram_kk": "Instagram",
+    "daily": "Ежедневно",
+    "daily_kk": "Күн сайын",
+    "wa_text": "Здравствуйте! Пишу с сайта, хочу уточнить...",
+    "wa_text_kk": "Сәлеметсіз бе! Сайттан жазып отырмын, нақтылағым келеді...",
+    "phone_label": "Телефон",
+    "phone_label_kk": "Телефон",
+    "whatsapp_label": "WhatsApp",
+    "whatsapp_label_kk": "WhatsApp",
+    "map_label": "Карта",
+    "map_label_kk": "Карта",
+    "photos_note": "У части напитков фото ещё нет — на их месте рисунок, он показывает тип напитка и подачу.",
+    "photos_note_kk": "Кейбір сусындардың фотосы әлі жоқ — олардың орнында сурет: ол сусын түрі мен берілуін көрсетеді.",
+    "hero_lead": "Молочный чай на тайском ассаме, тапиока, слаш и кофе на вынос. Всё меню и актуальные цены — на этой странице.",
+    "hero_lead_kk": "Тай ассамындағы сүтті шай, тапиока, слаш және өзіңізбен ала кететін кофе. Толық мәзір мен қазіргі бағалар — осы бетте.",
+    "see_menu": "Смотреть меню",
+    "see_menu_kk": "Мәзірді қарау",
+    "route": "Как добраться",
+    "route_kk": "Қалай жетуге болады",
+    "stat_items": "позиций",
+    "stat_items_kk": "позиция",
+    "stat_items_one": "позиция",
+    "stat_items_one_kk": "позиция",
+    "stat_items_few": "позиции",
+    "stat_items_few_kk": "позиция",
+    "stat_cats": "разделов",
+    "stat_cats_kk": "бөлім",
+    "stat_cats_one": "раздел",
+    "stat_cats_one_kk": "бөлім",
+    "stat_cats_few": "раздела",
+    "stat_cats_few_kk": "бөлім",
+    "hit": "Хит",
+    "hit_kk": "Хит",
+    "lang_switch": "Сменить язык",
+    "lang_switch_kk": "Тілді ауыстыру",
+    "lang_ru": "РУС",
+    "lang_ru_kk": "РУС",
+    "lang_kk": "ҚАЗ",
+    "lang_kk_kk": "ҚАЗ",
+    "cart": "Корзина",
+    "cart_kk": "Корзина",
+    "cart_empty": "Пока пусто",
+    "cart_empty_kk": "Әзірге бос",
+    "cart_empty_hint": "Нажмите на напиток в меню, чтобы добавить его сюда.",
+    "cart_empty_hint_kk": "Мәзірдегі сусынды басып, осында қосыңыз.",
+    "cart_total": "Итого",
+    "cart_total_kk": "Барлығы",
+    "cart_no_delivery": "без доставки — её посчитает оператор",
+    "cart_no_delivery_kk": "жеткізусіз — оны оператор есептейді",
+    "cart_order": "Заказать",
+    "cart_order_kk": "Тапсырыс беру",
+    "add_to_cart": "Добавить в корзину",
+    "add_to_cart_kk": "Корзинаға қосу",
+    "choose_size": "Размер",
+    "choose_size_kk": "Көлемі",
+    "choose_temp": "Подача",
+    "choose_temp_kk": "Беріледі",
+    "choose_qty": "Количество",
+    "choose_qty_kk": "Саны",
+    "close": "Закрыть",
+    "close_kk": "Жабу",
+    "minus": "Убрать одну",
+    "minus_kk": "Біреуін алу",
+    "plus": "Добавить одну",
+    "plus_kk": "Біреуін қосу",
+    "removed": "Убрано",
+    "removed_kk": "Алынды",
+    "out_of_stock": "Нет в наличии",
+    "out_of_stock_kk": "Сатылымда жоқ",
+    "out_note": "Отмеченного серым сейчас нет — уберите из заказа, чтобы продолжить.",
+    "out_note_kk": "Сұрмен белгіленген позиция сатылымда жоқ — жалғастыру үшін тапсырыстан алып тастаңыз.",
+    "order_title": "Оформление заказа",
+    "order_title_kk": "Тапсырысты рәсімдеу",
+    "order_back": "Назад в меню",
+    "order_back_kk": "Мәзірге оралу",
+    "temp_cold": "Холодный",
+    "temp_cold_kk": "Суық",
+    "temp_hot": "Горячий",
+    "temp_hot_kk": "Ыстық",
+    "price_from": "от {price}",
+    "price_from_kk": "{price} бастап",
+    "order_phone": "Телефон",
+    "order_phone_kk": "Телефон",
+    "order_phone_ph": "+7 (___) ___ __ __",
+    "order_phone_ph_kk": "+7 (___) ___ __ __",
+    "order_phone_hint": "Укажите номер, к которому привязан Kaspi — на него придёт счёт на оплату",
+    "order_phone_hint_kk": "Kaspi тіркелген нөмірді жазыңыз — төлем шоты оған келеді",
+    "order_phone_len": "Нужно 11 цифр — номер не дописан",
+    "order_phone_len_kk": "11 сан керек — нөмір толық емес",
+    "order_phone_start": "Номер должен начинаться на +7",
+    "order_phone_start_kk": "Нөмір +7 деп басталуы керек",
+    "order_addr": "Адрес доставки",
+    "order_addr_kk": "Жеткізу мекенжайы",
+    "order_addr_ph": "Пример: Проспект Нурсултана Назарбаева, 180",
+    "order_addr_ph_kk": "Мысалы: Нұрсұлтан Назарбаев даңғылы, 180",
+    "order_addr_short": "Слишком коротко — укажите улицу и номер дома",
+    "order_addr_short_kk": "Тым қысқа — көше мен үй нөмірін жазыңыз",
+    "order_addr_digit": "Не хватает номера дома",
+    "order_addr_digit_kk": "Үй нөмірі жоқ",
+    "order_addr_text": "Укажите улицу, а не только цифры",
+    "order_addr_text_kk": "Тек сандар емес, көшені де жазыңыз",
+    "order_required": "Заполните поле",
+    "order_required_kk": "Өрісті толтырыңыз",
+    "order_send": "Оформить",
+    "order_send_kk": "Рәсімдеу",
+    "order_how_wa": "Нажмёте «Оформить» — откроется WhatsApp с готовым заказом, останется только отправить.",
+    "order_how_wa_kk": "«Рәсімдеу» батырмасын бассаңыз, дайын тапсырысы бар WhatsApp ашылады — жіберу ғана қалады.",
+    "order_how_pay": "Оператор посчитает доставку и пришлёт счёт на Kaspi по вашему номеру.",
+    "order_how_pay_kk": "Оператор жеткізуді есептеп, нөміріңізге Kaspi арқылы шот жібереді.",
+    "wa_order_head": "Здравствуйте! Пишу через сайт. Хочу заказать:",
+    "wa_order_head_kk": "Сәлеметсіз бе! Сайт арқылы жазып отырмын. Тапсырыс бергім келеді:",
+    "wa_delivery": "Доставка",
+    "wa_delivery_kk": "Жеткізу",
+    "wa_pickup": "Самовывоз к {time}",
+    "wa_pickup_kk": "Өзі алып кету: {time}",
+    "order_mode": "Получение",
+    "order_mode_kk": "Алу тәсілі",
+    "order_mode_delivery": "Доставка",
+    "order_mode_delivery_kk": "Жеткізу",
+    "order_mode_pickup": "Самовывоз",
+    "order_mode_pickup_kk": "Өзі алып кету",
+    "order_time": "К какому времени приготовить",
+    "order_time_kk": "Қай уақытқа дайындау керек",
+    "order_time_ph": "Выберите время",
+    "order_time_ph_kk": "Уақытты таңдаңыз",
+    "order_time_hint": "Забрать по адресу: {address}",
+    "order_time_hint_kk": "Алып кету мекенжайы: {address}",
+    "order_time_pick": "Выберите время",
+    "order_time_pick_kk": "Уақытты таңдаңыз",
+    "order_time_late": "К этому времени уже не успеем — выберите другое",
+    "order_time_late_kk": "Бұл уақытқа үлгермейміз — басқасын таңдаңыз",
+    "order_time_none": "Сегодня на самовывоз уже не успеем приготовить. Можно оформить доставку.",
+    "order_time_none_kk": "Бүгін өзі алып кетуге дайындап үлгермейміз. Жеткізуді рәсімдеуге болады.",
+    "order_how_pay_pickup": "Оператор пришлёт счёт на Kaspi по вашему номеру. Оплатите — и заберите заказ к выбранному времени.",
+    "order_how_pay_pickup_kk": "Оператор нөміріңізге Kaspi арқылы шот жібереді. Төлеңіз де, тапсырысты таңдалған уақытта алып кетіңіз.",
+    "order_closed": "Заказы принимаем с {open} до {close}. Корзина сохранится — оформите заказ, когда откроемся.",
+    "order_closed_kk": "Тапсырыстарды {open}–{close} аралығында қабылдаймыз. Корзина сақталады — ашылғанда рәсімдеңіз."
+  }
+}
+</script>
+
+</body>
+</html>

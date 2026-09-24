@@ -1,0 +1,214 @@
+/* Админка наличия. Цвета и шрифты — те же, что у сайта, чтобы бариста
+   сразу узнавал своё. Всё крупно: пользуются с телефона, одной рукой,
+   у стойки. */
+
+@font-face {
+  font-family: "Manrope";
+  src: url("/fonts/manrope-cyr-lat.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Unbounded";
+  src: url("/fonts/unbounded-cyr-lat.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+:root {
+  --brand: #163C8C;
+  --brand-deep: #0E2A66;
+  --amber: #E08A2B;
+  --amber-2: #F5B23F;
+  --bg: #FBF6EE;
+  --surface: #FFFFFF;
+  --surface-2: #F5EDE0;
+  --text: #1A2137;
+  --muted: #6E7488;
+  --border: #E8DECF;
+  --ok: #1F8A63;
+  --stop: #C23B22;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F1422;
+    --surface: #182033;
+    --surface-2: #1F2940;
+    --text: #EEF1F8;
+    --muted: #9AA3B8;
+    --border: #2A3550;
+    --ok: #3CC28E;
+    --stop: #FF7A63;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+button, input { font: inherit; color: inherit; }
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(170deg, var(--brand-deep), var(--brand));
+  color: #FFFFFF;
+  padding-top: env(safe-area-inset-top);
+}
+.top-in {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 12px 16px;
+}
+.top img { border-radius: 10px; background: #FFFFFF; }
+.top-t { display: grid; line-height: 1.15; }
+.top-t b { font-family: "Unbounded", system-ui, sans-serif; font-size: 16px; }
+.top-t span { font-size: 13px; color: #CFDBF5; }
+.top-out { margin-left: auto; }
+.link {
+  background: none;
+  border: 0;
+  padding: 10px 4px;
+  color: #FFFFFF;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px calc(40px + env(safe-area-inset-bottom));
+}
+
+.flash {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  font-weight: 700;
+}
+
+.card {
+  padding: 22px 18px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+}
+.card h1 {
+  font-family: "Unbounded", system-ui, sans-serif;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.card p { color: var(--muted); margin-bottom: 14px; }
+.form { display: grid; gap: 14px; }
+.form label { display: grid; gap: 6px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.form input {
+  height: 50px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  font-size: 17px;
+}
+.form input:focus-visible { outline: 2px solid var(--amber-2); outline-offset: 1px; }
+
+.btn {
+  height: 52px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(160deg, var(--amber-2), var(--amber));
+  color: #2A1503;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btn:disabled { opacity: .45; cursor: default; }
+.btn-ghost {
+  width: 100%;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.summary { margin-bottom: 6px; }
+#summary { font-family: "Unbounded", system-ui, sans-serif; font-size: 18px; font-weight: 700; }
+.updated { color: var(--muted); font-size: 13px; }
+
+.cat { margin-top: 22px; }
+.cat h2 {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.rows {
+  list-style: none;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 8px 10px 8px 16px;
+}
+.row + .row { border-top: 1px solid var(--border); }
+.row-n { flex: 1; font-weight: 700; }
+.row.is-out .row-n { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+/* Переключатель: большой, с надписью, а не только цветом — «Есть» зелёным,
+   «Нет» красным. Цвет один не должен нести смысл. */
+.sw {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 86px;
+  height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .15s;
+}
+.sw[aria-checked="true"]  { background: var(--ok); color: #FFFFFF; }
+.sw[aria-checked="false"] { background: var(--stop); color: #FFFFFF; }
+.sw:focus-visible { outline: 3px solid var(--amber-2); outline-offset: 2px; }
+
+.reset { margin-top: 28px; }
+.hint { margin-top: 10px; color: var(--muted); font-size: 13px; text-align: center; }
+
+.toast {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+}

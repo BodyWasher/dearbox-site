@@ -1,0 +1,60 @@
+# Настройки сервера для хостинга hoster.kz (Plesk, Apache).
+# Файл лежит в корне сайта и заливается вместе с остальными — трогать его
+# не нужно. Переходы http → https и www → без www здесь не написаны:
+# они включаются галочками в Plesk («Хостинг и DNS» → «Хостинг»), и если
+# продублировать их тут, переходы могут пойти по кругу.
+
+AddDefaultCharset utf-8
+AddType image/webp .webp
+AddType font/woff2 .woff2
+
+# Своя страница вместо серой ошибки хостинга, если адрес набран с ошибкой.
+ErrorDocument 404 /404.html
+
+# Главная страница папки: /admin/ открывает admin/index.php.
+DirectoryIndex index.html index.php
+
+# Служебные файлы по прямой ссылке не отдаём. lib.php — общая часть
+# админки: сам по себе ничего не выводит, но открывать его незачем.
+<FilesMatch "^(\.htaccess|\.user\.ini|lib\.php)$">
+  Require all denied
+</FilesMatch>
+
+# Сжатие текста на лету: страница, стили и скрипт едут в 3–4 раза меньше,
+# на мобильном интернете это заметно. Картинки и шрифты и так сжаты.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript text/javascript application/json image/svg+xml application/xml
+</IfModule>
+
+# --- Кеширование ---------------------------------------------------------
+# Те же правила, что были для Netlify в файле _headers.
+<IfModule mod_headers.c>
+  # Страница, стили и скрипт меняются вместе с меню: браузер обязан каждый
+  # раз спрашивать, не появилась ли новая версия.
+  <FilesMatch "\.(html|css|js)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  # Фотографии напитков, логотип, превью и иконка — месяц. Фото меняются
+  # редко и всегда под новым именем файла.
+  <FilesMatch "\.(webp|png|jpg|jpeg|svg|ico)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  # Шрифты не меняются никогда — год.
+  <FilesMatch "\.woff2$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Наличие. Меняется чаще всего остального, кешировать нельзя вообще —
+  # иначе позиция кончится, а гости увидят это через сутки.
+  <Files "stock.json">
+    Header set Cache-Control "no-store"
+  </Files>
+
+  # Мелкая защита, которая ничего не стоит: браузер не угадывает тип файла
+  # и не даёт встроить сайт в чужую страницу.
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

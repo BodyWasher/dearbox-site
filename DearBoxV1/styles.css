@@ -1,0 +1,1992 @@
+/* ==========================================================================
+   Dear Box — меню тайской чайной
+   Один файл, без сборки. Цвета — только через переменные ниже.
+
+   Тема оформления: тайский чай. Глубокий синий с вывески + янтарь самого
+   чая + кремовая бумага. Иллюстрации напитков рисует app.js.
+   ========================================================================== */
+
+/* --- 0. Шрифты ------------------------------------------------------------
+   Лежат рядом, в папке fonts. Оставлены только латиница и кириллица, поэтому
+   оба файла вместе весят меньше 90 КБ. Раздача с того же адреса, что и сайт:
+   не нужно ни отдельного соединения с Google, ни работающего интернета
+   сверх самого сайта. font-display: swap — текст виден сразу, системным
+   шрифтом, и подменяется, когда файл доедет.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-cyr-lat.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Unbounded";
+  src: url("fonts/unbounded-cyr-lat.woff2") format("woff2");
+  font-weight: 700 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- 1. Токены ------------------------------------------------------------ */
+:root {
+  /* фирменные цвета с вывески и упаковки */
+  --brand: #163C8C;
+  --brand-deep: #0E2A66;
+  --brand-ink: #FFFFFF;
+  --brand-soft: #AFC7F2;
+
+  /* тематический янтарь — цвет тайского чая со сгущённым молоком */
+  --amber: #E08A2B;
+  --amber-2: #F5B23F;
+  --amber-3: #FFD27A;
+  --jade: #1E8A63;
+
+  /* светлая тема: кремовая бумага, а не белый лист */
+  --bg: #FBF6EE;
+  --surface: #FFFFFF;
+  --surface-2: #F5EDE0;
+  --text: #1A2137;
+  --muted: #6E7488;
+  --border: #EADFCE;
+  --divider: #EFE6D7;
+  --accent: var(--brand);
+  --price-bg: #FDF0DC;
+  --price-ink: #A15B12;
+  --shadow-s: 0 1px 2px rgba(26, 33, 55, .05);
+  --shadow: 0 1px 2px rgba(26, 33, 55, .05), 0 10px 28px -20px rgba(26, 33, 55, .40);
+
+  --ok-on-brand: #6EE7A8;
+  --warn-on-brand: #FBBF24;
+  --stop-on-brand: #FF9E9E;
+  --stop: #DC2626;
+
+  /* подложка иллюстраций */
+  --art-plate: #F7EFE2;
+
+  /* геометрия шапки */
+  --hdr-max: 86px;
+  --hdr-min: 48px;
+  --hdr-h: var(--hdr-max);
+  --cats-h: 62px;
+  --wave-h: 15px;
+  --stick: calc(var(--hdr-min) + var(--cats-h) + 10px);
+
+  --wrap: 640px;
+  --r-card: 18px;
+  --ease: cubic-bezier(.4, 0, .2, 1);
+  --ease-out: cubic-bezier(.16, .84, .44, 1);
+
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Unbounded", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg: #0B1121;
+  --surface: #141C31;
+  --surface-2: #1C2440;
+  --text: #ECF1FB;
+  --muted: #98A4C0;
+  --border: #26304E;
+  --divider: #212B47;
+  --accent: var(--amber-2);
+  --price-bg: rgba(245, 178, 63, .13);
+  --price-ink: #F8C463;
+  --shadow-s: 0 1px 2px rgba(0, 0, 0, .35);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 10px 28px -20px rgba(0, 0, 0, .9);
+
+  --stop: #FF9E9E;
+  --art-plate: #1E2743;
+}
+
+/* --- 2. База -------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  padding-top: var(--hdr-max);
+  font: 400 16px/1.55 var(--font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  background: var(--bg);
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: max(18px, env(safe-area-inset-left));
+}
+
+.ico { width: 20px; height: 20px; display: block; flex: none; }
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+.hdr :where(a, button):focus-visible,
+.hero :where(a, button):focus-visible { outline-color: var(--amber-3); }
+
+.skip {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  z-index: 60;
+  transform: translate(-50%, -220%);
+  padding: 11px 20px;
+  border-radius: 999px;
+  background: var(--amber);
+  color: #2A1503;
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip:focus-visible { transform: translate(-50%, 0); }
+
+/* --- 3. Шапка ------------------------------------------------------------- */
+.hdr {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 30;
+  height: var(--hdr-h);
+  background: linear-gradient(180deg, #1A459E 0%, var(--brand) 55%, var(--brand-deep) 100%);
+  color: var(--brand-ink);
+  transition: height .28s var(--ease), box-shadow .28s var(--ease);
+}
+.hdr::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 178, 63, .6), transparent);
+  opacity: 0;
+  transition: opacity .28s var(--ease);
+}
+.is-collapsed .hdr { box-shadow: 0 12px 30px -20px rgba(9, 20, 48, .95); }
+.is-collapsed .hdr::after { opacity: 1; }
+
+.hdr-in {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: 0 max(18px, env(safe-area-inset-left));
+  padding-top: 10px;
+  transition: height .28s var(--ease), padding-top .28s var(--ease);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  flex: 1 1 auto;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  flex: none;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .10);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
+  transition: width .28s var(--ease), height .28s var(--ease), border-radius .28s var(--ease);
+}
+.brand-mark svg { width: 76%; height: 76%; display: block; color: var(--brand-ink); }
+
+.brand-txt { display: flex; flex-direction: column; min-width: 0; }
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: font-size .28s var(--ease);
+}
+
+.brand-tag {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--brand-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 17px;
+  opacity: 1;
+  transition: max-height .28s var(--ease), opacity .2s var(--ease);
+}
+
+.hdr-act { display: flex; align-items: center; gap: 8px; flex: none; }
+
+.ibtn {
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .24);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .09);
+  color: var(--brand-ink);
+  cursor: pointer;
+  transition: background .18s var(--ease), border-color .18s var(--ease), transform .12s var(--ease);
+}
+.ibtn:hover { background: rgba(255, 255, 255, .2); border-color: rgba(255, 255, 255, .4); }
+.ibtn:active { transform: scale(.93); }
+
+/* Кнопка языка. Внутри не значок, а три буквы, поэтому ширина чуть больше
+   и нужен свой кегль — в остальном это та же .ibtn. Шире делать нельзя:
+   на экране в 360 px у шапки остаётся ровно столько места, дальше
+   название кофейни начинает обрезаться. */
+.ibtn-lang {
+  width: auto;
+  min-width: 44px;
+  padding: 0 9px;
+  font: 700 12px/1 var(--font-body);
+  letter-spacing: .04em;
+}
+
+[data-theme="light"] .ico-dark, [data-theme="dark"] .ico-light { display: none; }
+
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: 0 max(18px, env(safe-area-inset-left));
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--brand-soft);
+  line-height: 18px;
+  max-height: 20px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height .28s var(--ease), opacity .2s var(--ease);
+}
+.status .dot {
+  position: relative;
+  width: 8px; height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--brand-soft);
+}
+.status .dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0;
+}
+.status[data-state="open"]   .dot { background: var(--ok-on-brand); color: var(--ok-on-brand); }
+.status[data-state="open"]   .dot::after { animation: pulse 2.6s var(--ease) infinite; }
+.status[data-state="soon"]   .dot { background: var(--warn-on-brand); }
+.status[data-state="closed"] .dot { background: var(--stop-on-brand); }
+.status[data-state="open"]   { color: #FFFFFF; }
+
+@keyframes pulse {
+  0%   { transform: scale(1);   opacity: .6; }
+  70%  { transform: scale(2.6); opacity: 0; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* схлопнутое состояние */
+.is-collapsed { --hdr-h: var(--hdr-min); }
+.is-collapsed .hdr-in { height: 48px; padding-top: 0; }
+.is-collapsed .brand-mark { width: 30px; height: 30px; border-radius: 10px; }
+.is-collapsed .brand-name { font-size: 13px; }
+.is-collapsed .brand-tag { max-height: 0; opacity: 0; }
+.is-collapsed .status { max-height: 0; opacity: 0; }
+.is-collapsed .ibtn { width: 34px; height: 34px; border-radius: 10px; }
+.is-collapsed .cart-btn { height: 34px; border-radius: 10px; }
+
+/* --- 4. Первый экран ------------------------------------------------------ */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding-bottom: var(--wave-h);
+  background:
+    radial-gradient(120% 90% at 88% 0%, rgba(245, 178, 63, .30) 0%, rgba(245, 178, 63, 0) 55%),
+    radial-gradient(90% 70% at 0% 100%, rgba(31, 138, 99, .26) 0%, rgba(31, 138, 99, 0) 60%),
+    linear-gradient(170deg, var(--brand-deep) 0%, var(--brand) 45%, #10306F 100%);
+  color: var(--brand-ink);
+  overflow: hidden;
+}
+
+/* точки-жемчужины на фоне */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, .15) 1.1px, transparent 1.2px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .9), transparent 78%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, .9), transparent 78%);
+}
+
+.hero-leaf {
+  position: absolute;
+  z-index: -1;
+  color: rgba(255, 255, 255, .07);
+  pointer-events: none;
+}
+.hero-leaf svg { display: block; width: 100%; height: auto; }
+.hero-leaf-1 { top: -36px; left: -50px; width: 190px; transform: rotate(-16deg); }
+.hero-leaf-2 { bottom: -54px; right: -34px; width: 220px; transform: rotate(150deg); }
+
+.hero-in {
+  position: relative;
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: 26px max(18px, env(safe-area-inset-left)) 32px;
+}
+
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 14px;
+  padding: 5px 13px 5px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .10);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--amber-3);
+}
+.hero-kicker .ico { width: 14px; height: 14px; }
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(29px, 8.6vw, 42px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -.015em;
+}
+.hero-title .hl {
+  background: linear-gradient(100deg, var(--amber-3), var(--amber-2) 55%, #FFE7B4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-lead {
+  margin-top: 12px;
+  max-width: 36ch;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #D5E0F7;
+}
+
+/* Цифры — просто текст, без рамок и подложки: в рамках они стояли рядом
+   с кнопками и сами выглядели как кнопки. Между ними тонкая черта. */
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  margin-top: 18px;
+}
+.hero-stat {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-inline: 14px;
+  border-left: 1px solid rgba(255, 255, 255, .22);
+}
+.hero-stat:first-child { padding-left: 0; border-left: 0; }
+.hero-stat .ico { width: 16px; height: 16px; color: var(--brand-soft); }
+.hero-stat:first-child .ico { color: var(--amber-2); }
+.hero-stat b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+}
+.hero-stat span {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--brand-soft);
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 14px;
+  font-size: 14.5px;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+}
+.btn:active { transform: scale(.97); }
+.btn .ico { width: 18px; height: 18px; }
+.btn-primary {
+  background: linear-gradient(160deg, var(--amber-2), var(--amber));
+  color: #331902;
+  box-shadow: 0 12px 26px -14px rgba(245, 178, 63, .95);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 16px 32px -14px rgba(245, 178, 63, 1); }
+.btn-ghost {
+  /* Кнопка стоит поверх иллюстрации со стаканами — без размытия подложки
+     текст на ней читается плохо. */
+  background: rgba(255, 255, 255, .14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--brand-ink);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .26);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, .18); }
+
+/* композиция со стаканами */
+.hero-art {
+  position: absolute;
+  right: -10px;
+  bottom: var(--wave-h);
+  width: 166px;
+  z-index: -1;
+  pointer-events: none;
+  animation: float 7s ease-in-out infinite;
+}
+.hero-art svg { display: block; width: 100%; height: auto; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* --- 5. Волна ------------------------------------------------------------- */
+.wave { pointer-events: none; }
+.wave svg { display: block; width: 100%; height: 100%; fill: var(--bg); }
+
+.wave-hero {
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: var(--wave-h);
+  z-index: 2;
+}
+/* Волна футера живёт ВНУТРИ футера, а не над ним: у .ftr есть overflow:hidden
+   ради листа в углу, и вынесенная наружу волна просто обрезалась бы. */
+.wave-ftr {
+  position: absolute;
+  top: -1px; left: 0; right: 0;
+  height: var(--wave-h);
+  transform: scaleY(-1);
+}
+
+/* --- 5.1 О нас ------------------------------------------------------------ */
+/* Стоит между синим первым экраном и меню: рассказ о заведении до того,
+   как человек нырнёт в сорок позиций. */
+.about {
+  position: relative;
+  scroll-margin-top: var(--stick);
+  padding: 30px 0 4px;
+  overflow: hidden;
+}
+.about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(64% 58% at 92% 8%, rgba(245, 178, 63, .18), transparent 62%),
+    radial-gradient(58% 52% at 2% 98%, rgba(22, 60, 140, .07), transparent 60%);
+  pointer-events: none;
+}
+[data-theme="dark"] .about::before {
+  background:
+    radial-gradient(64% 58% at 92% 8%, rgba(245, 178, 63, .11), transparent 62%),
+    radial-gradient(58% 52% at 2% 98%, rgba(175, 199, 242, .07), transparent 60%);
+}
+
+.about-in {
+  position: relative;
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: max(18px, env(safe-area-inset-left));
+}
+
+.about-grid { display: grid; }
+
+.about-lead {
+  margin-top: 2px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -.005em;
+}
+.about-text {
+  margin-top: 11px;
+  font-size: 13.6px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.about-sign { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.about-sign span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow-s);
+  font-size: 12.5px;
+  font-weight: 650;
+}
+.about-sign .ico { width: 15px; height: 15px; color: var(--amber); }
+
+/* --- картинка --- */
+.about-art {
+  width: min(272px, 82%);
+  margin: 22px auto 0;
+}
+.about-art svg { display: block; width: 100%; height: auto; overflow: visible; }
+.about-art .ab-disc { fill: rgba(245, 178, 63, .16); }
+.about-art .ab-ring { stroke: var(--amber-2); opacity: .55; }
+.about-art .ab-dots { fill: var(--amber-2); opacity: .45; }
+.about-art .bub { fill: var(--surface); }
+.about-art .bub-ring { stroke: var(--border); }
+.about-art .ic { color: var(--amber); }
+[data-theme="dark"] .about-art .ab-disc { fill: rgba(245, 178, 63, .10); }
+[data-theme="dark"] .about-art .ic { color: var(--amber-2); }
+
+.ab-bub {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bob 6.5s ease-in-out infinite;
+}
+.ab-b1 { animation-delay: -.2s; }
+.ab-b2 { animation-delay: -1.9s; }
+.ab-b3 { animation-delay: -3.4s; }
+.ab-b4 { animation-delay: -4.8s; }
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+/* --- три факта --- */
+/* --- «Таиланд в чашке» ---
+   Полоса покрашена цветами вывески, а не токенами темы: она одинаковая
+   в светлом и тёмном режиме, как первый экран. Посреди кремовой страницы
+   это единственное тёмное пятно — им блок и держит на себе взгляд. */
+.journey {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-top: 26px;
+  padding: 22px 20px;
+  border-radius: var(--r-card);
+  background:
+    radial-gradient(120% 130% at 100% 0%, rgba(245, 178, 63, .30) 0%, rgba(245, 178, 63, 0) 58%),
+    radial-gradient(90% 80% at 0% 100%, rgba(31, 138, 99, .22) 0%, rgba(31, 138, 99, 0) 62%),
+    linear-gradient(160deg, var(--brand-deep) 0%, var(--brand) 62%, #10306F 100%);
+  color: var(--brand-ink);
+  box-shadow: var(--shadow);
+}
+.journey[hidden] { display: none; }
+
+/* те же точки-жемчужины, что на первом экране */
+.journey::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, .15) 1.1px, transparent 1.2px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(205deg, rgba(0, 0, 0, .85), transparent 72%);
+  mask-image: linear-gradient(205deg, rgba(0, 0, 0, .85), transparent 72%);
+}
+
+.journey-t {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 5.6vw, 25px);
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: -.015em;
+}
+.journey-hl { color: var(--amber-2); }
+
+.journey-l { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 14px; }
+.journey-i { padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .17); }
+.journey-i:first-child { padding-top: 0; border-top: 0; }
+.journey-k {
+  display: block;
+  color: var(--amber-3);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.journey-x {
+  margin-top: 6px;
+  font-size: 13.4px;
+  line-height: 1.55;
+  color: var(--brand-soft);
+}
+
+.about-facts { display: grid; gap: 10px; margin-top: 24px; }
+.fact {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-s);
+  transition: border-color .22s var(--ease), box-shadow .22s var(--ease), transform .22s var(--ease);
+}
+.fact:hover {
+  border-color: var(--amber-2);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.fact-ic {
+  display: grid;
+  place-items: center;
+  width: 42px; height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(150deg, var(--amber-3), var(--amber-2));
+  color: #402303;
+  box-shadow: 0 10px 20px -14px rgba(224, 138, 43, 1);
+}
+.fact-ic .ico { width: 21px; height: 21px; }
+.fact-t { font-size: 14.5px; font-weight: 700; line-height: 1.3; }
+.fact-x { margin-top: 5px; font-size: 12.8px; line-height: 1.5; color: var(--muted); }
+
+/* --- 6. Лента категорий --------------------------------------------------- */
+.cats {
+  position: sticky;
+  top: var(--hdr-h);
+  z-index: 20;
+  height: var(--cats-h);
+  background: var(--bg);
+  transition: top .28s var(--ease);
+}
+.cats::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.cats-track {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: 0 max(14px, env(safe-area-inset-left));
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.cats-track::-webkit-scrollbar { display: none; }
+
+.chip {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 15px;
+  flex: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  text-decoration: none;
+  scroll-snap-align: center;
+  transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+}
+.chip .ico { width: 17px; height: 17px; opacity: .85; }
+.chip:hover { color: var(--text); border-color: var(--amber-2); }
+.chip[aria-current="true"] { color: #331902; border-color: transparent; background: transparent; }
+.chip[aria-current="true"] .ico { opacity: 1; }
+
+.cats-pill {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 0;
+  height: 36px;
+  width: 0;
+  margin-top: -18px;
+  border-radius: 999px;
+  background: linear-gradient(150deg, var(--amber-3), var(--amber-2) 60%, var(--amber));
+  box-shadow: 0 10px 22px -14px rgba(224, 138, 43, 1);
+  opacity: 0;
+  transition: transform .34s var(--ease-out), width .34s var(--ease-out), opacity .2s var(--ease);
+}
+.cats-pill.on { opacity: 1; }
+
+/* --- 7. Меню -------------------------------------------------------------- */
+main { padding-bottom: 8px; }
+
+.error {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--stop);
+  font-size: 14px;
+}
+
+.photos-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 22px;
+  padding: 12px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.photos-note .ico { width: 17px; height: 17px; margin-top: 1px; color: var(--amber); }
+
+#menu { scroll-margin-top: var(--stick); }
+#menu:focus { outline: none; }
+.cat { scroll-margin-top: var(--stick); padding-top: 26px; }
+.cat:first-of-type { padding-top: 20px; }
+
+.sec-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+}
+.sec-ic {
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  flex: none;
+  border-radius: 12px;
+  background: linear-gradient(150deg, var(--amber-3), var(--amber-2));
+  color: #402303;
+  box-shadow: 0 10px 20px -14px rgba(224, 138, 43, 1);
+}
+.sec-ic .ico { width: 19px; height: 19px; }
+.sec-count {
+  margin-left: auto;
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  opacity: .75;
+}
+
+.items { display: grid; gap: 10px; }
+
+.item {
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 13px;
+  padding: 12px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-s);
+  transition: border-color .22s var(--ease), box-shadow .22s var(--ease), transform .22s var(--ease);
+}
+.item:hover {
+  border-color: var(--amber-2);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+/* Карточка целиком открывает окно выбора. */
+.item { position: relative; cursor: pointer; }
+
+/* Значок в углу — единственная подсказка, что по карточке можно нажать:
+   на телефоне наведения нет, и без него это неочевидно. */
+.item-add {
+  position: absolute;
+  bottom: 10px; right: 10px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px; height: 28px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--surface-2);
+  color: var(--muted);
+  cursor: pointer;
+  opacity: .75;
+  transition: background .16s var(--ease), color .16s var(--ease), opacity .16s var(--ease);
+}
+.item-add .ico { width: 15px; height: 15px; }
+.item:hover .item-add { opacity: 1; background: var(--amber); color: #2A1503; }
+.item-add:focus-visible { opacity: 1; }
+
+/* --- позиция, которой нет ---
+   Карточка остаётся на своём месте в разделе: человек, пришедший именно за
+   этим напитком, должен увидеть, что он в карте есть и просто кончился, —
+   а не решить, что ошибся сайтом. Гасим фотографию и текст, но не прячем. */
+.item-off { cursor: default; }
+.item-off:hover { border-color: var(--border); box-shadow: var(--shadow-s); transform: none; }
+.item-off .art { filter: grayscale(1); opacity: .5; }
+.item-off .item-n,
+.item-off .item-price,
+.item-off .first-n { opacity: .55; }
+.item-off .item-d,
+.item-off .first-w { opacity: .7; }
+.item-off .hit { display: none; }        /* «хит» у того, чего нет, — издёвка */
+
+/* Сама надпись бледной быть не должна: она здесь главное. */
+.tag-out {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* Предупреждение в корзине и на экране заказа: спокойный тон, но заметнее
+   серой сноски про доставку — от него зависит, поедет ли заказ. */
+.crt-warn {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--price-bg);
+  color: var(--price-ink);
+  font-size: 12.5px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+/* Иллюстрация напитка. Рисуется в app.js по названию и категории. */
+.art {
+  display: grid;
+  place-items: center;
+  width: 68px; height: 86px;
+  border-radius: 14px;
+  background:
+    radial-gradient(80% 60% at 50% 10%, rgba(255, 255, 255, .6), transparent 70%),
+    var(--art-plate);
+  box-shadow: inset 0 0 0 1px var(--border);
+  overflow: hidden;
+}
+[data-theme="dark"] .art {
+  background:
+    radial-gradient(80% 60% at 50% 10%, rgba(255, 255, 255, .07), transparent 70%),
+    var(--art-plate);
+}
+.art svg { width: 100%; height: 100%; display: block; }
+
+/* Плитка с фотографией. Снимки вырезаны по стакану и стоят на общей линии
+   дна, поэтому им нужны одинаковые поля, а не подгонка по месту. */
+.art img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+  display: block;
+  padding: 4px 3px 2px;
+  box-sizing: border-box;
+}
+.art-photo {
+  background:
+    radial-gradient(72% 56% at 50% 8%, rgba(255, 255, 255, .85), transparent 72%),
+    var(--art-plate);
+}
+[data-theme="dark"] .art-photo {
+  background:
+    radial-gradient(72% 56% at 50% 8%, rgba(255, 255, 255, .1), transparent 72%),
+    var(--art-plate);
+}
+
+/* Части иллюстрации, которые обязаны меняться вместе с темой: стекло,
+   контур, поверхность жидкости и тень под стаканом. Всё остальное —
+   цвет самого напитка — приходит из app.js. */
+.art .glass,  .about-art .glass  { fill: rgba(255, 255, 255, .62); }
+.art .rim,    .about-art .rim    { fill: rgba(255, 255, 255, .8); }
+.art .line,   .about-art .line   { stroke: rgba(26, 33, 55, .3); }
+.art .shadow, .about-art .shadow { fill: rgba(26, 33, 55, .09); }
+[data-theme="dark"] .art .glass,  [data-theme="dark"] .about-art .glass  { fill: rgba(255, 255, 255, .09); }
+[data-theme="dark"] .art .rim,    [data-theme="dark"] .about-art .rim    { fill: rgba(255, 255, 255, .22); }
+[data-theme="dark"] .art .line,   [data-theme="dark"] .about-art .line   { stroke: rgba(236, 241, 251, .34); }
+[data-theme="dark"] .art .shadow, [data-theme="dark"] .about-art .shadow { fill: rgba(0, 0, 0, .35); }
+
+.item-b { min-width: 0; display: flex; flex-direction: column; }
+
+.item-top { display: flex; align-items: flex-start; gap: 10px; }
+
+.item-n {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -.005em;
+  overflow-wrap: break-word;
+}
+
+.hit {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 7px;
+  padding: 2px 7px 2px 5px;
+  border-radius: 999px;
+  background: linear-gradient(150deg, var(--amber-3), var(--amber));
+  color: #3E2103;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  vertical-align: 2px;
+  white-space: nowrap;
+}
+.hit .ico { width: 11px; height: 11px; }
+
+.item-price {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--price-bg);
+  color: var(--price-ink);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.item-d {
+  margin-top: 5px;
+  font-size: 12.8px;
+  line-height: 1.45;
+  color: var(--muted);
+  overflow-wrap: break-word;
+}
+
+.item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 9px;
+  /* место под значок корзины в правом нижнем углу карточки */
+  padding-right: 32px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tag .ico { width: 12px; height: 12px; }
+.tag-size { background: var(--price-bg); color: var(--price-ink); }
+/* Объём в плашке — подпись к цене, а не сама цена: мельче и тише её.
+   Раньше здесь стояла одна буква «M», и 2 px отступа хватало; у «0,5 л»
+   нужен просвет пошире, иначе литры липнут к числу. */
+.tag-size i {
+  font-style: normal;
+  font-size: .92em;
+  opacity: .62;
+  margin-right: 4px;
+}
+.tag-cold { color: #1B7FA6; background: rgba(27, 127, 166, .12); }
+.tag-hot  { color: #B4620C; background: rgba(180, 98, 12, .12); }
+[data-theme="dark"] .tag-cold { color: #7ED2EE; background: rgba(126, 210, 238, .12); }
+[data-theme="dark"] .tag-hot  { color: #F3B45F; background: rgba(243, 180, 95, .12); }
+
+/* появление позиций */
+.cat .item { opacity: 0; transform: translateY(10px); }
+.cat.is-in .item {
+  animation: rise .5s var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+/* --- 8. Первый раз у нас? ------------------------------------------------- */
+.first { scroll-margin-top: var(--stick); padding-top: 26px; }
+
+.first-box {
+  position: relative;
+  padding: 20px 16px 16px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background:
+    radial-gradient(130% 80% at 100% 0%, rgba(245, 178, 63, .22), transparent 62%),
+    var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.first-box::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--amber-3), var(--amber), var(--brand));
+}
+
+.first-lead {
+  margin: 8px 0 16px;
+  font-size: 13.2px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.first-list { display: flex; flex-direction: column; gap: 14px; }
+.first-item {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 13px;
+  padding-top: 14px;
+  border-top: 1px solid var(--divider);
+}
+.first-item:first-child { padding-top: 0; border-top: 0; }
+
+.first-art { position: relative; }
+.first-art .art { width: 54px; height: 68px; }
+@media (min-width: 1024px) { .first-art .art { width: 62px; height: 78px; } }
+.first-num {
+  position: absolute;
+  top: -7px; left: -7px;
+  display: grid;
+  place-items: center;
+  width: 23px; height: 23px;
+  border-radius: 8px;
+  background: linear-gradient(150deg, var(--amber-2), var(--amber));
+  color: #3B1F02;
+  font-size: 11.5px;
+  font-weight: 800;
+  box-shadow: 0 5px 12px -5px rgba(224, 138, 43, 1);
+}
+
+.first-n { font-size: 15px; font-weight: 700; line-height: 1.3; }
+.first-w { margin-top: 4px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.first-p { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+
+/* --- 9. Контакты ---------------------------------------------------------- */
+.contacts {
+  scroll-margin-top: var(--stick);
+  padding-top: 30px;
+  padding-bottom: 26px;
+}
+
+.card-c {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.rating {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 16px;
+  background:
+    radial-gradient(100% 140% at 100% 0%, rgba(245, 178, 63, .34), transparent 62%),
+    linear-gradient(140deg, var(--brand) 0%, var(--brand-deep) 100%);
+  color: var(--brand-ink);
+  overflow: hidden;
+}
+.rating::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, .13) 1px, transparent 1.1px);
+  background-size: 18px 18px;
+  pointer-events: none;
+}
+.rating-val {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+}
+.rating-val .ico { width: 21px; height: 21px; color: var(--amber-2); }
+.rating-txt { position: relative; font-size: 12.5px; line-height: 1.4; color: var(--brand-soft); }
+.rating-txt b { display: block; color: var(--brand-ink); font-size: 13.5px; font-weight: 700; }
+
+.crow {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-top: 1px solid var(--divider);
+  color: inherit;
+  text-decoration: none;
+  min-height: 60px;
+}
+.crows > .crow { border-top: 0; }
+.crows > .crow + .crow { border-top: 1px solid var(--divider); }
+a.crow { transition: background .18s var(--ease); }
+a.crow:hover { background: var(--surface-2); }
+a.crow:hover .crow-ic { background: linear-gradient(150deg, var(--amber-3), var(--amber-2)); color: #3B1F02; }
+a.crow:active { background: var(--surface-2); }
+
+.crow-ic {
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 13px;
+  background: var(--surface-2);
+  color: var(--accent);
+  transition: background .18s var(--ease), color .18s var(--ease);
+}
+.crow-b { min-width: 0; }
+.crow-l {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 10.5px;
+  font-weight: 750;
+  letter-spacing: .06em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.crow-v { display: block; font-size: 14.5px; font-weight: 650; line-height: 1.35; overflow-wrap: break-word; }
+.crow .ico-go { width: 17px; height: 17px; color: var(--muted); }
+
+/* --- 10. Футер ------------------------------------------------------------ */
+.ftr {
+  position: relative;
+  margin-top: 44px;
+  background:
+    radial-gradient(90% 120% at 10% 0%, rgba(245, 178, 63, .18), transparent 55%),
+    linear-gradient(180deg, var(--brand-deep), #0A2050);
+  color: var(--brand-ink);
+  overflow: hidden;
+}
+.ftr::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, .10) 1px, transparent 1.1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}
+.ftr-leaf {
+  position: absolute;
+  bottom: -46px; left: -46px;
+  width: 200px;
+  color: rgba(255, 255, 255, .05);
+  pointer-events: none;
+}
+.ftr-leaf svg { display: block; width: 100%; height: auto; }
+.ftr-in {
+  position: relative;
+  padding-top: calc(26px + var(--wave-h));
+  padding-bottom: calc(34px + env(safe-area-inset-bottom));
+  text-align: center;
+}
+.ftr-mark {
+  display: grid;
+  place-items: center;
+  width: 54px; height: 54px;
+  margin: 0 auto 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .09);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
+  color: var(--brand-ink);
+}
+.ftr-mark svg { width: 62%; height: 62%; display: block; }
+.ftr-name {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.ftr-tag { margin-top: 5px; font-size: 12.5px; color: var(--amber-3); }
+.ftr-meta { margin-top: 14px; font-size: 12.5px; line-height: 1.65; color: var(--brand-soft); }
+.ftr-soc { display: flex; justify-content: center; gap: 9px; margin-top: 16px; }
+.ftr-soc a {
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .09);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
+  color: var(--brand-ink);
+  transition: background .18s var(--ease), transform .15s var(--ease);
+}
+.ftr-soc a:hover { background: rgba(255, 255, 255, .2); transform: translateY(-2px); }
+.ftr-copy { margin-top: 16px; font-size: 11.5px; color: rgba(175, 199, 242, .68); }
+
+/* --- 10.5 Всплывающие окна ------------------------------------------------ */
+/* Одна оболочка на выбор напитка и на корзину. Прямоугольник по центру,
+   крестик справа сверху; на узком экране прижимается к низу — там до него
+   ближе большим пальцем. */
+/* Порядок правил важен: .mask задаёт display, а это перебивает встроенное
+   [hidden] { display: none } браузера. Без строки ниже закрытое окно
+   остаётся прозрачной плёнкой поверх всей страницы и съедает нажатия —
+   видно её не было, а меню переставало работать. */
+.mask[hidden] { display: none; }
+
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(12, 20, 40, .55);
+  backdrop-filter: blur(2px);
+  animation: mask-in .16s var(--ease);
+}
+@keyframes mask-in { from { opacity: 0; } }
+
+/* Пока окно открыто, страница под ним не ездит. */
+body.is-locked { overflow: hidden; }
+
+.modal {
+  position: relative;
+  width: min(460px, 100%);
+  max-height: min(88vh, 720px);
+  overflow-y: auto;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 30px 60px -20px rgba(10, 18, 40, .55);
+  animation: modal-in .2s var(--ease);
+}
+@keyframes modal-in { from { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) {
+  .mask, .modal { animation: none; }
+}
+
+.modal-x {
+  position: absolute;
+  top: 12px; right: 12px;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--surface-2);
+  color: var(--muted);
+  cursor: pointer;
+}
+.modal-x:hover { color: var(--text); }
+.modal-x .ico { width: 17px; height: 17px; }
+
+.modal-head { display: flex; gap: 14px; align-items: flex-start; padding-right: 40px; }
+.modal-head .art { flex: none; width: 66px; height: 82px; }
+.modal-t { margin: 0; font-family: var(--font-display); font-size: 18px; line-height: 1.25; }
+.modal-d { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+/* Ряд выбора: слева подпись, справа варианты. */
+.pick { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+.pick-l { flex: none; width: 84px; color: var(--muted); font-size: 12px; font-weight: 700; }
+.pick-b { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.pick-o {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 36px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .16s var(--ease), background .16s var(--ease);
+}
+.pick-o i { font-style: normal; font-size: .88em; opacity: .6; margin-right: 1px; }
+.pick-o .ico { width: 14px; height: 14px; }
+.pick-o:hover { border-color: var(--amber-2); }
+.pick-o[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--amber);
+  color: #2A1503;
+}
+.pick-o[aria-pressed="true"] i { opacity: .7; }
+
+/* Выбранная подача красится в свой цвет: холод — синим, горячее — красным.
+   Янтарный остаётся размеру, где выбирают литры, а не температуру.
+
+   Цвета зашиты числами, а не взяты из токенов темы: холод и жар значат одно
+   и то же и на светлой, и на тёмной. Тон подобран так, чтобы не попасть в
+   тон значка — у снежинки светлая сердцевина, у огня жёлтое ядро, и на этих
+   фонах они остаются видны.
+
+   :not(:disabled) обязателен: у позиции с единственной подачей кнопка тоже
+   помечена aria-pressed, но она серая и некликабельная — красить её нельзя. */
+.pick-cold[aria-pressed="true"]:not(:disabled) {
+    background: #48D1CC;
+    color: #FFFFFF;
+}
+.pick-hot[aria-pressed="true"]:not(:disabled) {
+    background: #FE4C15;
+    color: #FFFFFF;
+}
+
+/* Единственный вариант: показан, но нажать нельзя. Серым, а не янтарным,
+   чтобы его не принимали за выбор среди нескольких. Правило обязано идти
+   ПОСЛЕ [aria-pressed]: у них одинаковый вес, и решает порядок. */
+.pick-o:disabled {
+  border-color: transparent;
+  background: var(--surface-2);
+  color: var(--muted);
+  cursor: default;
+}
+.pick-o:disabled:hover { border-color: transparent; }
+.pick-o:disabled i { opacity: .55; }
+
+.qty-b {
+  display: grid;
+  place-items: center;
+  width: 36px; height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.qty-b:hover:not(:disabled) { border-color: var(--amber-2); }
+.qty-b:disabled { opacity: .4; cursor: default; }
+.qty-n { min-width: 26px; text-align: center; font-size: 15px; font-weight: 800; }
+
+.modal-sum {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 15px;
+  font-weight: 800;
+  text-align: right;
+}
+
+/* Кнопки окон и экрана заказа. Именно .act, а не .btn: .btn уже занят
+   кнопками первого экрана, и переопределение ломало бы их. */
+.act {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 13px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.act-main { background: linear-gradient(160deg, var(--amber-2), var(--amber)); color: #2A1503; }
+.act-main:hover { filter: brightness(1.04); }
+.act-main:active { transform: scale(.99); }
+.act:disabled { opacity: .5; cursor: default; filter: none; }
+
+/* --- 10.6 Содержимое корзины и экран заказа ------------------------------- */
+.crt-list { margin-top: 16px; display: grid; gap: 8px; }
+
+.crt {
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+  transition: opacity .18s var(--ease);
+}
+.crt .art { width: 46px; height: 56px; border-radius: 11px; }
+.crt-b { min-width: 0; }
+.crt-n { margin: 0; font-size: 13.5px; font-weight: 700; line-height: 1.3; }
+.crt-v { margin: 3px 0 0; color: var(--muted); font-size: 11.5px; font-weight: 700; }
+.crt-r { display: flex; align-items: center; gap: 10px; }
+.crt-q { display: flex; align-items: center; gap: 2px; }
+.crt-s { margin: 0; min-width: 62px; text-align: right; font-size: 13px; font-weight: 800; }
+
+/* Потухшая строка: позиция убрана, но ещё на экране — плюс вернёт её.
+   Исчезнет, когда окно закроется. */
+.crt-off { opacity: .42; }
+.crt-off .crt-n { text-decoration: line-through; }
+
+.qty-s { width: 30px; height: 30px; font-size: 15px; border-radius: 9px; }
+
+.crt-empty { padding: 30px 10px; text-align: center; color: var(--muted); }
+.crt-empty .ico { width: 34px; height: 34px; opacity: .35; }
+.crt-empty-t { margin: 10px 0 0; font-size: 15px; font-weight: 800; color: var(--text); }
+.crt-empty-x { margin: 6px auto 0; max-width: 30ch; font-size: 13px; line-height: 1.5; }
+
+.crt-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 700;
+}
+.crt-total b { font-size: 19px; font-weight: 800; }
+.crt-note { margin: 5px 0 0; color: var(--muted); font-size: 11.5px; text-align: right; }
+
+.act-ghost {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.act-ghost:hover { border-color: var(--amber-2); }
+
+/* --- экран заказа --- */
+.order { padding: calc(var(--hdr-h) + 20px) 0 60px; }
+/* Своя ширина, не общая: на компьютере --wrap равен 100%, и состав
+   заказа растянулся бы на весь экран. */
+.order-in { width: min(620px, 100% - 32px); margin: 0 auto; }
+.order-card {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-s);
+}
+.order-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.order-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+}
+.order-row + .order-row { padding-top: 12px; border-top: 1px solid var(--border); }
+.order-q { color: var(--muted); font-size: 13px; font-weight: 800; }
+.order-s { min-width: 74px; text-align: right; font-size: 14px; font-weight: 800; }
+
+/* --- форма заказа --- */
+.oform { margin-top: 18px; display: grid; gap: 16px; }
+
+.ofield label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+/* Ряд «Доставка / Самовывоз» стоит в сетке формы, отступ ему даёт gap. */
+.oform .pick { margin-top: 0; }
+
+.ofield input,
+.ofield select {
+  display: block;
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+}
+/* Плейсхолдер серый: он подсказывает формат, а не содержит ответ. */
+.ofield input::placeholder { color: var(--muted); opacity: .65; font-weight: 500; }
+.ofield input:focus-visible,
+.ofield select:focus-visible { outline: 2px solid var(--amber-2); outline-offset: 1px; }
+.ofield input[aria-invalid="true"],
+.ofield select[aria-invalid="true"] { border-color: #D2412A; }
+.ofield select { cursor: pointer; }
+
+.ofield-hint {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.ofield-err {
+  margin: 6px 0 0;
+  color: #D2412A;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+[data-theme="dark"] .ofield-err { color: #FF8F7A; }
+[data-theme="dark"] .ofield input[aria-invalid="true"],
+[data-theme="dark"] .ofield select[aria-invalid="true"] { border-color: #FF8F7A; }
+
+/* Объяснение над кнопкой: не предупреждение и не ошибка, поэтому тон
+   спокойный — та же кремовая подложка, что у выключенной кнопки под ним. */
+.ohow {
+  margin-top: 18px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 10px;
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+}
+.ohow p {
+  display: grid;
+  grid-template-columns: 17px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.8px;
+  line-height: 1.5;
+}
+.ohow .ico { width: 17px; height: 17px; margin-top: 1px; color: var(--amber); }
+
+/* Кнопка отправки. Зелёная, когда всё заполнено верно; серая и выключенная,
+   пока нет — .act:disabled гасит прозрачностью, а здесь нужен именно серый,
+   иначе выключенная кнопка выглядит как бледно-зелёная «почти готовая». */
+.act-go {
+  background: linear-gradient(160deg, #27A97A, #1B7C58);
+  color: #FFFFFF;
+}
+.act-go:hover:not(:disabled) { filter: brightness(1.06); }
+.act-go:disabled {
+  /* Рамка нужна: без неё серая плашка на кремовой странице читается не как
+     выключенная кнопка, а как просто блок фона. */
+  box-shadow: inset 0 0 0 1px var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  opacity: 1;
+}
+
+.order .act { max-width: 320px; margin-left: auto; margin-right: auto; }
+
+/* --- 11. Корзина в шапке -------------------------------------------------- */
+/* Здесь раньше стояла кнопка «Написать». WhatsApp никуда не делся — он в
+   «Контактах» и в подвале, — а место занял заказ: по нему нажимают чаще. */
+.cart-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px 0 11px;
+  flex: none;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(160deg, var(--amber-3), var(--amber));
+  color: #2A1503;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 8px 18px -10px rgba(120, 70, 6, .9);
+  transition: transform .16s var(--ease), box-shadow .16s var(--ease), height .28s var(--ease);
+}
+.cart-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 22px -10px rgba(120, 70, 6, 1); }
+.cart-btn:active { transform: scale(.96); }
+.cart-btn .ico { width: 19px; height: 19px; }
+
+/* Счётчик сидит на значке, а не рядом: в строке для него нет места. */
+.cart-ic { position: relative; display: grid; place-items: center; }
+.cart-n {
+  position: absolute;
+  top: -5px; right: -7px;
+  min-width: 17px; height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #2A1503;
+  color: var(--amber-3);
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 17px;
+  text-align: center;
+}
+/* Пустая корзина не кричит: счётчик бледнеет, но остаётся на месте —
+   так видно, что кнопка вообще про заказ. */
+.cart-btn[data-empty="true"] .cart-n { opacity: .45; }
+
+/* Прибавилась позиция — счётчик коротко дёргается. */
+@keyframes cart-bump {
+  40% { transform: scale(1.45); }
+  100% { transform: scale(1); }
+}
+.cart-btn[data-bump="true"] .cart-n { animation: cart-bump .32s var(--ease); }
+@media (prefers-reduced-motion: reduce) {
+  .cart-btn[data-bump="true"] .cart-n { animation: none; }
+}
+
+/* На узком экране на слово места нет — остаётся значок со счётчиком.
+   Порог тот же, что был у «Написать»: ниже 430 px шапка заполнена
+   под ноль, и слово вытолкнуло бы название кофейни. */
+@media (max-width: 429.98px) {
+  .cart-btn { width: 38px; padding: 0; justify-content: center; }
+  .cart-btn > span:last-child { display: none; }
+}
+
+/* --- 12. Адаптив ---------------------------------------------------------- */
+.shell { display: contents; }
+/* .shell задаёт display, и это перебивает встроенное [hidden] браузера.
+   Без этой строки экран заказа открывался поверх меню, а меню оставалось
+   под ним живым и кликабельным. */
+.shell[hidden] { display: none; }
+
+/* 12.1 Телефон: меню вкладками ------------------------------------------- */
+/* Порог 640px обязан совпадать с константой PHONE в app.js. */
+@media (max-width: 639.98px) {
+  .cat { display: none; padding-top: 20px; }
+  .cat.on { display: block; }
+}
+
+/* На узком экране кнопки первого экрана должны встать в одну строку:
+   во вторую они наезжают на стаканы. */
+@media (max-width: 419.98px) {
+  .btn { padding: 0 16px; font-size: 14px; gap: 6px; }
+  .hero-lead { max-width: 30ch; }
+}
+
+/* До планшета стаканам не хватает места сбоку от текста: они ложились под
+   цифры и под «Как добраться», и подписи расплывались на их фоне. Здесь
+   стаканы стоят ниже кнопок, на своей полосе. */
+@media (max-width: 639.98px) {
+  .hero-in { padding-bottom: 116px; }
+  .hero-art { width: 124px; right: 14px; }
+}
+
+/* На самых узких телефонах три цифры не влезали в строку, и третья
+   уезжала вниз вместе со своей чертой. Иконка остаётся только у рейтинга. */
+@media (max-width: 379.98px) {
+  .hero-stat { padding-inline: 11px; }
+  .hero-stat:not(:first-child) .ico { display: none; }
+}
+
+@media (min-width: 420px) {
+  .item-n { font-size: 15.5px; }
+}
+
+/* 12.2 Планшет ------------------------------------------------------------ */
+@media (min-width: 640px) {
+  :root { --hdr-max: 92px; --cats-h: 66px; --wave-h: 18px; }
+  .hdr-in { height: 56px; padding-top: 12px; }
+  .brand-mark { width: 44px; height: 44px; }
+  .brand-name { font-size: 17px; }
+  .brand-tag { font-size: 13px; }
+
+  .hero-in { padding: 36px max(18px, env(safe-area-inset-left)) 44px; }
+  .hero-art { width: 216px; }
+  .hero-lead { font-size: 15px; max-width: 44ch; }
+
+  .about { padding: 38px 0 6px; }
+  .about-lead { font-size: 16px; }
+  .about-text { font-size: 14px; }
+  .about-art { width: min(300px, 70%); margin-top: 26px; }
+  /* Три колонки фактов только на большом экране: в 640px текст в них
+     превращается в лесенку из двух слов. Пункты «Таиланда в чашке» по той
+     же причине остаются столбиком. */
+  .journey { margin-top: 30px; padding: 26px; }
+  .about-facts { gap: 12px; margin-top: 28px; }
+  .fact { padding: 15px; }
+
+  .items { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .item { grid-template-columns: 72px 1fr; gap: 14px; padding: 13px 14px; }
+  .art { width: 72px; height: 90px; }
+  .sec-title { font-size: 20px; }
+  .cat { padding-top: 34px; }
+}
+
+/* 12.3 Компьютер: две колонки, лента категорий уходит в боковую панель ---- */
+@media (min-width: 1024px) {
+  :root {
+    --wrap: 100%;
+    --hdr-max: 104px;
+    --hdr-min: 62px;
+    --wave-h: 22px;
+    --side: 244px;
+    --gap: 44px;
+    --page: 1180px;
+    --stick: calc(var(--hdr-min) + 28px);
+  }
+
+  .wrap { padding-inline: 0; }
+
+  /* --- шапка --- */
+  .hdr-in {
+    height: 62px;
+    padding-top: 14px;
+    max-width: var(--page);
+    padding-inline: 32px;
+  }
+  .status { max-width: var(--page); padding-inline: 32px; font-size: 13px; }
+  .brand-mark { width: 50px; height: 50px; border-radius: 16px; }
+  .brand-name { font-size: 19px; }
+  .brand-tag { font-size: 13.5px; }
+  .is-collapsed .hdr-in { height: 62px; }
+  .is-collapsed .brand-mark { width: 36px; height: 36px; }
+  .is-collapsed .brand-name { font-size: 15.5px; }
+  .ibtn { width: 40px; height: 40px; }
+  .cart-btn { height: 40px; padding: 0 16px 0 13px; font-size: 14px; }
+
+  /* --- первый экран --- */
+  .hero-in {
+    max-width: var(--page);
+    padding: 56px 32px 68px;
+    min-height: 340px;
+  }
+  .hero-title { font-size: clamp(40px, 4vw, 56px); max-width: 14ch; }
+  .hero-lead { font-size: 16px; max-width: 46ch; }
+  .hero-art { width: 340px; right: 5%; bottom: calc(var(--wave-h) - 6px); }
+  .hero-leaf-1 { width: 300px; top: -74px; left: -74px; }
+  .hero-leaf-2 { width: 340px; bottom: -96px; right: 3%; }
+  .btn { height: 50px; padding: 0 24px; font-size: 15px; }
+
+  /* --- о нас --- */
+  .about { padding: 54px 0 14px; }
+  .about-in { max-width: var(--page); padding-inline: 32px; }
+  .about-grid {
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, .94fr);
+    gap: 56px;
+    align-items: center;
+  }
+  .about-lead { font-size: 17.5px; max-width: 34ch; }
+  .about-text { font-size: 14.6px; max-width: 46ch; }
+  .about-art { width: min(360px, 100%); margin: 0 0 0 auto; }
+
+  /* Здесь места хватает на три колонки. Заголовок оставляем сверху, а не
+     сбоку: в боковой колонке пункты сжимаются до двух слов в строке —
+     ровно та лесенка, из-за которой и факты стоят в одну колонку до 1024. */
+  .journey {
+    margin-top: 40px;
+    padding: 30px 34px 32px;
+  }
+  .journey-t { font-size: 28px; }
+  .journey-l {
+    margin-top: 24px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 34px;
+  }
+  .journey-i {
+    padding: 0 0 0 26px;
+    border-top: 0;
+    border-left: 1px solid rgba(255, 255, 255, .17);
+  }
+  .journey-i:first-child { padding-left: 0; border-left: 0; }
+  .journey-x { font-size: 14px; }
+
+  .about-facts { grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
+  .fact { padding: 18px; grid-template-columns: 46px 1fr; gap: 15px; }
+  .fact-ic { width: 46px; height: 46px; border-radius: 15px; }
+  .fact-t { font-size: 15.5px; }
+  .fact-x { font-size: 13.2px; }
+
+  /* --- каркас страницы --- */
+  .shell {
+    display: grid;
+    grid-template-columns: var(--side) minmax(0, 1fr);
+    gap: var(--gap);
+    max-width: var(--page);
+    margin-inline: auto;
+    padding: 0 32px;
+    align-items: start;
+  }
+
+  /* --- боковая колонка вместо липкой ленты --- */
+  .cats {
+    position: sticky;
+    top: calc(var(--hdr-min) + 18px);
+    height: auto;
+    background: none;
+    z-index: 1;
+    padding-top: 34px;
+    transition: none;
+  }
+  .cats::after { content: none; }
+
+  .cats-track {
+    display: block;
+    height: auto;
+    max-width: none;
+    padding: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .cats-pill { display: none; }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: auto;
+    min-height: 44px;
+    margin-bottom: 5px;
+    padding: 10px 14px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background: transparent;
+    font-size: 13.8px;
+    white-space: normal;
+    line-height: 1.3;
+    transition: background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease);
+  }
+  .chip:hover { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .chip[aria-current="true"] {
+    background: linear-gradient(140deg, var(--brand), var(--brand-deep));
+    color: var(--brand-ink);
+    font-weight: 700;
+    border-color: transparent;
+    box-shadow: 0 14px 26px -18px rgba(14, 42, 102, 1);
+  }
+  .chip[aria-current="true"] .ico { color: var(--amber-2); opacity: 1; }
+
+  /* --- меню в две колонки --- */
+  main { padding-bottom: 24px; }
+
+  .cat { padding-top: 46px; }
+  .cat:first-of-type { padding-top: 36px; }
+  .sec-title { font-size: 22px; margin-bottom: 20px; }
+  .sec-ic { width: 40px; height: 40px; border-radius: 14px; }
+  .sec-ic .ico { width: 22px; height: 22px; }
+
+  .items { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .item { grid-template-columns: 84px 1fr; gap: 16px; padding: 15px 16px; }
+  .art { width: 84px; height: 104px; }
+  .item-n { font-size: 16px; }
+  .item-price { font-size: 13.5px; }
+  .item-d { font-size: 13.2px; }
+
+  .photos-note { margin-top: 30px; font-size: 13px; }
+
+  /* --- «Первый раз у нас?» тремя колонками --- */
+  .first { padding-top: 40px; }
+  .first-box { padding: 28px 30px 26px; border-radius: 26px; }
+  .first-lead { margin: 10px 0 22px; font-size: 14.5px; max-width: 64ch; }
+  .first-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 30px;
+  }
+  .first-item {
+    padding-top: 0;
+    padding-left: 26px;
+    border-top: 0;
+    border-left: 1px solid var(--divider);
+  }
+  .first-item:first-child { padding-left: 0; border-left: 0; }
+  .first-n { font-size: 16px; }
+
+  /* --- контакты двумя колонками --- */
+  .contacts { padding-top: 52px; padding-bottom: 40px; }
+  .card-c { border-radius: 26px; }
+  .rating { padding: 22px 28px; gap: 18px; }
+  .rating-val { font-size: 32px; }
+  .rating-val .ico { width: 26px; height: 26px; }
+
+  .crows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0;
+  }
+  .crow { padding: 15px 24px; min-height: 66px; }
+  .crows > .crow:nth-child(-n + 2) { border-top: 0; }
+  .crows > .crow:nth-child(even) { border-left: 1px solid var(--divider); }
+
+  /* --- футер --- */
+  .ftr-in { padding-top: calc(40px + var(--wave-h)); padding-bottom: 44px; max-width: var(--page); padding-inline: 32px; }
+  .ftr-mark { width: 62px; height: 62px; border-radius: 20px; }
+
+}
+
+@media (min-width: 1360px) {
+  :root { --side: 264px; --gap: 56px; --page: 1300px; }
+  .hero-art { width: 380px; }
+}
+
+/* --- 13. Меньше движения -------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .cat .item { opacity: 1; transform: none; }
+}
+
+@media print {
+  .hdr, .cats, .skip, .hero, .about, .ftr { display: none; }
+  body { padding-top: 0; }
+  .shell { display: block; }
+  .cat { display: block; }
+  .items { display: block; }
+  .item { break-inside: avoid; opacity: 1; transform: none; border: 0; box-shadow: none; padding: 6px 0; }
+  .art { display: none; }
+}

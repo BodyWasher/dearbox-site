@@ -1,0 +1,5 @@
+#!/bin/sh
+# Перед каждым коммитом: public должна совпадать со свежей сборкой из
+# DearBoxV1. Иначе на сайт уедет старая версия — например, старая цена.
+# Хук подключён командой: git config core.hooksPath tools/git-hooks
+node tools/build.mjs --check || exit 1

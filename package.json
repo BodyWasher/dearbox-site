@@ -1,0 +1,15 @@
+{
+  "name": "dearbox",
+  "private": true,
+  "description": "Сайт-меню Dear Box. Исходники — DearBoxV1, сжатая версия для гостей — public (собирается командой npm run build).",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "deploy": "node tools/build.mjs --check && git subtree split --prefix=public -b deploy && git push origin main deploy"
+  },
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "html-minifier-terser": "^7.2.0",
+    "terser": "^5.51.2"
+  }
+}
